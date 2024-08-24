@@ -126,8 +126,4 @@ credentials.json
 *.bak
 *.log
 
-# Custom server files
-server.mjs
-supabase.js
-
 .vscode/
