@@ -8,7 +8,10 @@ import ShoppingListPreview from './ShoppingListPreview';
 import ChatIcon from './ChatIcon';
 import dynamic from 'next/dynamic';
 
+// Dynamisch importieren der MiniMap-Komponente mit ssr: false
 const MiniMap = dynamic(() => import('./MiniMap'), { ssr: false });
+// Dynamisch importieren der Sidebar-Komponente mit ssr: false
+const Sidebar = dynamic(() => import('./Sidebar'), { ssr: false });
 import supabase from '../../utils/supabaseClient';
 
 export default function FamilyDashboard() {
