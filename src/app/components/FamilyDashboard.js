@@ -1,4 +1,3 @@
-// src/app/components/FamilyDashboard.js
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -19,6 +18,8 @@ export default function FamilyDashboard() {
 
   useEffect(() => {
     const fetchFamilyCode = async () => {
+      if (typeof window === 'undefined') return; // Sicherstellen, dass der Code nicht serverseitig ausgeführt wird
+
       const { data: { user }, error: userError } = await supabase.auth.getUser();
 
       if (userError) {
