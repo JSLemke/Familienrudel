@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import 'tailwindcss/tailwind.css';
+
+:root {
+  --max-width: 1100px;
+  --border-radius: 12px;
+  --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
+    "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
+    "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+/* Scrollbalken für Firefox entfernen */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-image: url('/public/textur.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Familien-Dashboard und Sidebar */
+.family-dashboard {
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.family-dashboard::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar {
+  background-image: url('/public/textur.jpg'); /* Hintergrundbild für die Sidebar */
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+
+nav {
+  margin-bottom: 0;
+}
+
+.navbar {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+}
+
+.main-content {
+  padding-top: 56px;
+}
+
+/* Basic styles for the to-do list */
+
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+#myInput {
+  padding: 10px;
+  margin: 10px 0;
+  width: calc(100% - 22px);
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+ul li {
+  padding: 12px;
+  background: #f9f9f9;
+  margin: 5px 0;
+  font-size: 18px;
+  cursor: pointer;
+  position: relative;
+  transition: 0.2s;
+}
+
+ul li:hover {
+  background: #ddd;
+}
+
+.close {
+  position: absolute;
+  right: 0;
+  padding: 12px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.close:hover {
+  color: red;
+}
+
+.addBtn {
+  padding: 10px;
+  background: #008CBA;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  display: inline-block;
+}
+
+.addBtn:hover {
+  background: #007B9A;
+}
+
