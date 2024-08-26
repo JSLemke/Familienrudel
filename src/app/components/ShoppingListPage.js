@@ -1,4 +1,3 @@
-// src/app/components/ShoppingListPage.js
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -10,6 +9,10 @@ export default function ShoppingListPage() {
     const [statusMessage, setStatusMessage] = useState('');
     const supabase = createClientInstance();
 
+    useEffect(() => {
+        fetchItems(); // Load shopping list items on component mount
+    }, []);
+
     const fetchItems = async () => {
         const { data, error } = await supabase
             .from('shoppinglist')
@@ -19,28 +22,28 @@ export default function ShoppingListPage() {
         if (error) {
             console.error('Error fetching shopping list:', error.message);
         } else {
+            console.log('Fetched items:', data);  // Debugging-Log
             setItems(data);
         }
     };
 
-    useEffect(() => {
-        fetchItems(); // Load shopping list items on component mount
-    }, []);
-
     const addItem = async () => {
+        console.log('Attempting to add item:', newItem);  // Debugging-Log
+
         if (newItem.trim().length === 0) {
             setStatusMessage('Artikel darf nicht leer sein.');
             return;
         }
 
         const { data: { user } } = await supabase.auth.getUser();
+        console.log('Current user:', user);  // Debugging-Log
 
         const { error } = await supabase
             .from('shoppinglist')
             .insert([
                 {
-                    task: newItem.trim(), // Verwende 'task' statt 'item_name'
-                    user_id: user.id, // Verwende die user.id
+                    task: newItem.trim(),
+                    user_id: user.id,
                     is_complete: false,
                     inserted_at: new Date(),
                 },
@@ -50,13 +53,15 @@ export default function ShoppingListPage() {
             console.error('Error adding item:', error.message);
             setStatusMessage('Fehler beim Hinzufügen des Artikels.');
         } else {
-            setNewItem(''); // Leert das Eingabefeld
+            setNewItem('');
             setStatusMessage('Artikel erfolgreich hinzugefügt');
             await fetchItems(); // Aktualisiert die Liste
         }
     };
 
     const deleteItem = async (itemId) => {
+        console.log('Attempting to delete item with id:', itemId);  // Debugging-Log
+
         const { error } = await supabase
             .from('shoppinglist')
             .delete()
@@ -87,7 +92,7 @@ export default function ShoppingListPage() {
                 {items.length > 0 ? (
                     items.map((item) => (
                         <li key={item.id} className="flex justify-between mb-2">
-                            <span>{item.task}</span> {/* Verwende 'task' statt 'item_name' */}
+                            <span>{item.task}</span>
                             <button
                                 onClick={() => deleteItem(item.id)}
                                 className="text-red-500"
