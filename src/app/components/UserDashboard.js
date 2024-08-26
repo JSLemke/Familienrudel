@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import supabase from '../../utils/supabaseClient';
+import supabase from 'src/utils/supabase/client.js';
 
 export default function UserDashboard() {
   const [tasks, setTasks] = useState([]);
@@ -10,7 +10,7 @@ export default function UserDashboard() {
   const [newNote, setNewNote] = useState('');
   const [shoppingItems, setShoppingItems] = useState([]);
   const [newItem, setNewItem] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);  // Ladezustand hinzufügen
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export default function UserDashboard() {
         console.error('Fehler beim Laden der Daten:', err.message);
         setError(err.message);
       } finally {
-        setLoading(false);  
+        setLoading(false);  // Ladezustand deaktivieren
       }
     };
 
@@ -100,7 +100,7 @@ export default function UserDashboard() {
   };
 
   if (loading) {
-    return <p>Lade das Benutzerdashboard...</p>;  
+    return <p>Lade das Benutzerdashboard...</p>;  // Ladeanzeige
   }
 
   if (error) {

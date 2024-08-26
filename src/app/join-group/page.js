@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import supabase from '../../utils/supabaseClient';
+import supabase from 'src/utils/supabase/client.js';
 
 export default function JoinGroup() {
     const [groupCode, setGroupCode] = useState('');

@@ -1,9 +1,10 @@
+// src/app/components/Login.js
 'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
-import supabase from '../../utils/supabaseClient';
+import createClientInstance from 'src/utils/supabase/client.js';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -12,18 +13,49 @@ export default function Login() {
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
-
+  const supabase = createClientInstance();
+  
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-           
+      // Verwende den korrekt initialisierten Supabase-Client
+      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-      alert('Login erfolgreich!');
-      router.push('/dashboard'); 
+      if (signInError) throw new Error(signInError.message);
+
+      const user = signInData.user;
+
+      // Überprüfe den Familiencode
+      const { data: familyData, error: familyError } = await supabase
+        .from('families')
+        .select('*')
+        .eq('familycode', familyCode)
+        .single();
+
+      if (familyError || !familyData) {
+        throw new Error('Invalid family code.');
+      }
+
+      // Überprüfe, ob der Benutzer zur Familie gehört
+      const members = familyData.members || {};
+      if (!members[user.id]) {
+        throw new Error('User is not part of this family.');
+      }
+
+      // Speichere den Familiencode im Benutzerprofil (optional)
+      await supabase
+        .from('users')
+        .update({ familycode: familyCode })
+        .eq('id', user.id);
+
+      // Weiterleitung zum Dashboard
+      router.push('/dashboard');
     } catch (error) {
       setError(error.message);
-      
     }
   };
 

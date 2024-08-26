@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import supabase from '../../utils/supabaseClient';
+import getSupabaseClient from 'src/utils/supabase/client.js';
 
 export default function ProfileEdit() {
   const [nickname, setNickname] = useState('');
@@ -12,6 +12,7 @@ export default function ProfileEdit() {
 
   useEffect(() => {
     const fetchUserData = async () => {
+      const supabase = getSupabaseClient();
       const { data: { user }, error: userError } = await supabase.auth.getUser();
       
       if (userError) {
@@ -45,6 +46,7 @@ export default function ProfileEdit() {
   };
 
   const handleSave = async () => {
+    const supabase = getSupabaseClient();
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     
     if (userError) {

@@ -1,5 +1,6 @@
-import supabase from './supabaseClient';
+import supabase from 'src/utils/supabase/client.js';
 
+// Funktion zum Erstellen einer neuen Familie
 export const createFamily = async (familyCode, userId) => {
     const { data, error } = await supabase
         .from('families')
@@ -8,7 +9,7 @@ export const createFamily = async (familyCode, userId) => {
                 familycode: familyCode,
                 createdby: userId,
                 createdat: new Date().toISOString(),
-                members: { [userId]: true }, 
+                members: { [userId]: true }, // Der Ersteller wird als erstes Mitglied hinzugefügt
             },
         ]);
 
@@ -19,7 +20,7 @@ export const createFamily = async (familyCode, userId) => {
 
     return data;
 };
-
+// Funktion zum Hinzufügen eines Benutzers zu einer bestehenden Familie
 export const addUserToFamily = async (familyCode, userId) => {
   const { data: family, error: familyError } = await supabase
       .from('families')

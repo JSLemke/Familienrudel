@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import supabase from '../../utils/supabaseClient'; 
+import supabase from 'src/utils/supabase/client.js'; // Verwende den Supabase-Client
 
 const ContactList = () => {
   const [contacts, setContacts] = useState([]);

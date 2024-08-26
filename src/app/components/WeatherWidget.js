@@ -8,21 +8,20 @@ export default function WeatherWidget() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (typeof window === 'undefined' || !navigator.geolocation) {
-            setError('Geolocation wird von diesem Browser nicht unterstützt oder ist serverseitig nicht verfügbar.');
-            return;
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    setLocation({ lat: latitude, lon: longitude });
+                },
+                (err) => {
+                    setError('Geolocation nicht verfügbar oder abgelehnt.');
+                    console.error('Error fetching location:', err);
+                }
+            );
+        } else {
+            setError('Geolocation wird von diesem Browser nicht unterstützt.');
         }
-
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const { latitude, longitude } = position.coords;
-                setLocation({ lat: latitude, lon: longitude });
-            },
-            (err) => {
-                setError('Geolocation nicht verfügbar oder abgelehnt.');
-                console.error('Error fetching location:', err);
-            }
-        );
     }, []);
 
     useEffect(() => {
@@ -38,16 +37,17 @@ export default function WeatherWidget() {
 
     const getWeatherIcon = (code) => {
         const weatherIcons = {
-            1: '☀️',
-            2: '🌤️',
-            3: '🌥️',
-            45: '🌫️',
-            48: '🌫️',
-            51: '🌧️',
-            61: '🌧️',
-            80: '🌦️',
-            95: '⛈️',
-            96: '⛈️',
+            1: '☀️', // Clear sky
+            2: '🌤️', // Few clouds
+            3: '🌥️', // Scattered clouds
+            45: '🌫️', // Fog
+            48: '🌫️', // Fog
+            51: '🌧️', // Drizzle
+            61: '🌧️', // Rain
+            80: '🌦️', // Showers
+            95: '⛈️', // Thunderstorm
+            96: '⛈️', // Thunderstorm with hail
+            // Add more mappings based on weather codes
         };
 
         return weatherIcons[code] || '❓';
@@ -60,7 +60,6 @@ export default function WeatherWidget() {
             {weather ? (
                 <div>
                     <div className="text-5xl">{getWeatherIcon(weather.weathercode)}</div>
-                    <p className="text-lg font-semibold">{location ? `${location.lat}, ${location.lon}` : 'Standort unbekannt'}</p>
                     <p className="text-3xl">{weather.temperature}°C</p>
                 </div>
             ) : (

@@ -1,6 +1,6 @@
 'use client';
 
-import supabase from '../../utils/supabaseClient';
+import supabase from 'src/utils/supabase/client.js';
 
 export default function ProfileSettings() {
   const handleDeleteAccount = async () => {

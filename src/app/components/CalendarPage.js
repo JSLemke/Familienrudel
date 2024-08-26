@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import supabase from '../../utils/supabaseClient';
+import supabase from 'src/utils/supabase/client.js';
 
 export default function CalendarPage() {
   const [date, setDate] = useState(new Date());

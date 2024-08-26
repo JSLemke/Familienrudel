@@ -1,17 +1,12 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import L from 'leaflet';
+import dynamic from 'next/dynamic';
 import 'leaflet/dist/leaflet.css';
-import supabase from '../../utils/supabaseClient';
+import createClientInstance from 'src/utils/supabase/client.js';
 
-
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-});
+// Dynamischer Import von Leaflet
+const LeafletMap = dynamic(() => import('leaflet'), { ssr: false });
 
 export default function GPSPage() {
   const mapRef = useRef(null);
@@ -20,6 +15,20 @@ export default function GPSPage() {
     if (typeof window !== 'undefined') {
       if (mapRef.current) return;
 
+      const L = require('leaflet');
+
+      // Hier die Icon-Konfiguration einfügen;
+      const DefaultIcon = L.icon({
+          iconUrl: 'public/geolocation icon.webp',  // Pfad zur Icon-Datei
+          iconSize: [25, 41], // Größe des Icons
+          iconAnchor: [12, 41], // Punkt des Icons, der mit der Location koordiniert
+          popupAnchor: [1, -34], // Punkt, von dem aus das Popup erscheinen soll, relativ zum IconAnchor
+          shadowSize: [41, 41] // Größe des Schattens
+      });
+
+      L.Marker.prototype.options.icon = DefaultIcon;
+
+      // Karte initialisieren
       mapRef.current = L.map('gpsmap').setView([51.505, -0.09], 13);
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -27,6 +36,7 @@ export default function GPSPage() {
       }).addTo(mapRef.current);
 
       const fetchUserData = async () => {
+        const supabase = createClientInstance();
         const { data: { user }, error: userError } = await supabase.auth.getUser();
 
         if (userError || !user) {

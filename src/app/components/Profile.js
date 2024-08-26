@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import supabase from '../../utils/supabaseClient';
+import supabase from 'src/utils/supabase/client.js';
 
 export default function Profile() {
   const [nickname, setNickname] = useState('');
@@ -33,7 +33,7 @@ export default function Profile() {
           if (data.photo_url) {
             setPhotoURL(data.photo_url);
           } else {
-            setPhotoURL('/default-profile.png'); 
+            setPhotoURL('/default-profile.png'); // Fallback auf ein Standardbild
           }
         }
       }

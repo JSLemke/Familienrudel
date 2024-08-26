@@ -1,6 +1,6 @@
 'use client';
 
-import supabase from '../../utils/supabaseClient'; 
+import supabase from 'src/utils/supabase/client.js'; // Korrekte Importpfad für Supabase
 import { useRouter } from 'next/navigation';
 import React from 'react';
 

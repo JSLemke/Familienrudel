@@ -7,124 +7,119 @@ import TasksPreview from './TasksPreview';
 import ShoppingListPreview from './ShoppingListPreview';
 import ChatIcon from './ChatIcon';
 import dynamic from 'next/dynamic';
+import createClient from 'src/utils/supabase/client.js';
 
-// Dynamisch importieren der MiniMap-Komponente mit ssr: false
 const MiniMap = dynamic(() => import('./MiniMap'), { ssr: false });
-// Dynamisch importieren der Sidebar-Komponente mit ssr: false
-const Sidebar = dynamic(() => import('./Sidebar'), { ssr: false });
-import supabase from '../../utils/supabaseClient';
 
 export default function FamilyDashboard() {
-  const [familyCode, setFamilyCode] = useState('');
-  const [userId, setUserId] = useState('');
-  const [error, setError] = useState('');
+    const [familyCode, setFamilyCode] = useState('');
+    const [userId, setUserId] = useState('');
+    const [error, setError] = useState('');
 
-  useEffect(() => {
-    const fetchFamilyCode = async () => {
-      if (typeof window === 'undefined') return; // Sicherstellen, dass der Code nicht serverseitig ausgeführt wird
+    useEffect(() => {
+        const fetchFamilyCode = async () => {
+            try {
+                const supabase = createClient();
+                const { data: userData, error: userError } = await supabase.auth.getUser();
 
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
+                if (userError) {
+                    setError('Fehler beim Abrufen des Benutzers: ' + userError.message);
+                    console.error(userError.message);
+                    return;
+                }
 
-      if (userError) {
-        setError('Fehler beim Abrufen des Benutzers: ' + userError.message);
-        console.error(userError.message);
-        return;
-      }
+                const user = userData?.user;
 
-      if (user) {
-        setUserId(user.id);
+                if (user) {
+                    setUserId(user.id);
 
-        const { data, error } = await supabase
-          .from('users')
-          .select('familyCode')
-          .eq('id', user.id)
-          .single();
+                    const { data, error } = await supabase
+                        .from('users')
+                        .select('familycode')
+                        .eq('id', user.id)
+                        .single();
 
-        if (error) {
-          setError('Fehler beim Abrufen des Familiencodes: ' + error.message);
-          console.error(error.message);
-        } else if (data && data.familyCode) {
-          setFamilyCode(data.familyCode);
-          await addToFamilyTable(user.id, data.familyCode);
-        } else {
-          setError('Kein Familiencode gefunden.');
+                    if (error) {
+                        setError('Fehler beim Abrufen des Familiencodes: ' + error.message);
+                        console.error(error.message);
+                    } else if (data && data.familycode) {
+                        setFamilyCode(data.familycode);
+                        await addToFamilyTable(data.familycode, user.id);
+                    } else {
+                        setError('Kein Familiencode gefunden.');
+                    }
+                }
+            } catch (err) {
+                setError('Ein unerwarteter Fehler ist aufgetreten.');
+                console.error(err);
+            }
+        };
+
+        fetchFamilyCode();
+    }, []);
+
+    const addToFamilyTable = async (familyCode, userId) => {
+        try {
+            const supabase = createClient();
+            const { data: family, error: fetchError } = await supabase
+                .from('families')
+                .select('members')
+                .eq('familycode', familyCode)
+                .single();
+    
+            if (fetchError) {
+                setError('Fehler beim Abrufen der Familienmitglieder: ' + fetchError.message);
+                console.error(fetchError.message);
+                return;
+            }
+    
+            let members = family?.members;
+    
+            // Stelle sicher, dass members ein Objekt ist
+            if (typeof members !== 'object' || members === null) {
+                console.error('Erwartetes Objekt, aber etwas anderes gefunden');
+                members = {};  // Setze es auf ein leeres Objekt
+            }
+    
+            if (!members[userId]) {
+                members[userId] = true;
+    
+                const { error: updateError } = await supabase
+                    .from('families')
+                    .update({ members })
+                    .eq('familycode', familyCode);
+    
+                if (updateError) {
+                    setError('Fehler beim Hinzufügen des Benutzers zur Familien-Tabelle: ' + updateError.message);
+                    console.error(updateError.message);
+                } else {
+                    console.log('Benutzer erfolgreich zur Familien-Tabelle hinzugefügt.');
+                }
+            }
+        } catch (err) {
+            setError('Ein unerwarteter Fehler ist beim Hinzufügen zur Familie aufgetreten.');
+            console.error(err);
         }
-      }
-    };
+    }; 
 
-    fetchFamilyCode();
-  }, []);
-
-  const addToFamilyTable = async (userId, familyCode) => {
-    const { data: family, error: fetchError } = await supabase
-      .from('families')
-      .select('members')
-      .eq('familycode', familyCode)
-      .maybeSingle();
-
-    if (fetchError) {
-      setError('Fehler beim Abrufen der Familienmitglieder: ' + fetchError.message);
-      console.error(fetchError.message);
-      return;
-    }
-
-    if (!family) {
-      setError('Familie nicht gefunden oder es gibt mehr als eine Übereinstimmung.');
-      return;
-    }
-
-    let members = family?.members || [];
-
-    if (typeof members === 'string') {
-      try {
-        members = JSON.parse(members);
-      } catch (parseError) {
-        setError('Fehler beim Parsen der Mitgliederliste: ' + parseError.message);
-        console.error(parseError.message);
-        return;
-      }
-    }
-
-    if (!Array.isArray(members)) {
-      setError('Fehler: Die Mitgliederliste ist kein gültiges Array.');
-      return;
-    }
-
-    if (!members.includes(userId)) {
-      members.push(userId);
-    }
-
-    const { error: updateError } = await supabase
-      .from('families')
-      .update({ members: JSON.stringify(members) })
-      .eq('familycode', familyCode);
-
-    if (updateError) {
-      setError('Fehler beim Hinzufügen des Benutzers zur Familien-Tabelle: ' + updateError.message);
-      console.error(updateError.message);
-    } else {
-      console.log('Benutzer erfolgreich zur Familien-Tabelle hinzugefügt.');
-    }
-  };
-
-  return (
-    <div className="family-dashboard p-8">
-      <h1 className="text-3xl mb-4">Familiendashboard</h1>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <div className="bg-gray-100 p-4 mb-4 rounded flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-semibold">Familie:</h2>
-          <p className="text-lg">{familyCode || 'Kein Familiencode zugeordnet'}</p>
+    return (
+        <div className="family-dashboard p-8">
+            <h1 className="text-3xl mb-4">Familiendashboard</h1>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            <div className="bg-gray-100 p-4 mb-4 rounded flex items-center justify-between">
+                <div>
+                    <h2 className="text-xl font-semibold">Familie:</h2>
+                    <p className="text-lg">{familyCode || 'Kein Familiencode zugeordnet'}</p>
+                </div>
+                <ChatIcon />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <MiniCalendar />
+                <WeatherWidget />
+                <TasksPreview />
+                <ShoppingListPreview />
+                <MiniMap />
+            </div>
         </div>
-        <ChatIcon />
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <MiniCalendar />
-        <WeatherWidget />
-        <TasksPreview />
-        <ShoppingListPreview />
-        <MiniMap />
-      </div>
-    </div>
-  );
+    );
 }

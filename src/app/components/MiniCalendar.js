@@ -12,7 +12,7 @@ export default function MiniCalendar() {
         <div className="bg-white p-4 rounded shadow">
             <h2 className="text-xl font-bold mb-4">Mini-Kalender</h2>
             <Calendar
-                locale="de-DE" 
+                locale="de-DE" // Lokalisierung auf Deutsch setzen
                 onChange={setDate}
                 value={date}
             />

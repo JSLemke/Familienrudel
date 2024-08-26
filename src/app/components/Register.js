@@ -1,115 +1,127 @@
-// src/app/components/Register.js
 'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import supabase from '../../utils/supabaseClient';
-import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import createClientInstance from 'src/utils/supabase/client.js';
 
 export default function Register() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [familyName, setFamilyName] = useState('');
-  const [familyCode, setFamilyCode] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
-  const router = useRouter();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [familyName, setFamilyName] = useState('');
+    const [familyCode, setFamilyCode] = useState('');
+    const [error, setError] = useState('');
+    const router = useRouter();
 
-  const handleSignUp = async () => {
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
+    const generateFamilyCode = () => {
+        const newFamilyCode = `${familyName}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+        setFamilyCode(newFamilyCode);
+    };
 
-      if (error) throw error;
+    const handleRegister = async (e) => {
+        e.preventDefault();
 
-      const user = data.user;
-      if (!user) throw new Error('User sign-up failed');
+        if (!familyCode) {
+            setError('Bitte generieren Sie zuerst einen Familiencode');
+            return;
+        }
 
-      const generatedFamilyCode = `${familyName}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+        try {
+            const supabase = createClientInstance();
 
-      const { error: docError } = await supabase.from('users').insert([
-        {
-          id: user.id,
-          email: user.email,
-          familycode: generatedFamilyCode, 
-          createdAt: new Date().toISOString(),
-        },
-      ]);
-      if (docError) throw docError;
+            // Zuerst den Benutzer registrieren
+            const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+                email,
+                password,
+            });
 
-      
-      const { error: familyError } = await supabase.from('families').insert([
-        {
-          familycode: generatedFamilyCode,
-          createdby: user.id,
-          members: JSON.stringify({ [user.id]: true }),
-          createdat: new Date().toISOString(),
-        },
-      ]);
+            if (signUpError) throw signUpError;
 
-      if (familyError) throw familyError;
+            const user = signUpData.user;
 
-      alert('User and family group created successfully');
-      router.push('/dashboard');
-    } catch (error) {
-      setError(error.message);
-    }
-  };
+            // Benutzer in der 'users'-Tabelle einfügen
+            const { error: insertUserError } = await supabase
+                .from('users')
+                .insert([
+                    {
+                        id: user.id,
+                        email: user.email,
+                        familycode: familyCode,
+                        createdAt: new Date().toISOString(),
+                    },
+                ]);
 
-  return (
-    <div className="flex flex-col items-center justify-center h-screen p-4">
-      <div className="p-8 max-w-md w-full">
-        <h1 className="text-4xl mb-6 text-center">Register</h1>
-        <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-silver-500"
-            required
-          />
-          <div className="relative w-full">
-            <input
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-silver-900"
-              required
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500"
-            >
-              {showPassword ? (
-                <EyeSlashIcon className="h-5 w-5" />
-              ) : (
-                <EyeIcon className="h-5 w-5" />
-              )}
-            </button>
-          </div>
-          <input
-            type="text"
-            placeholder="Family Name"
-            value={familyName}
-            onChange={(e) => setFamilyName(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-silver-700"
-            required
-          />
-          <button
-            type="submit"
-            onClick={handleSignUp}
-            className="w-full p-3 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            Jetzt registrieren
-          </button>
-          {error && <p className="text-red-500 text-center">{error}</p>}
-        </form>
-      </div>
-    </div>
-  );
+            if (insertUserError) throw insertUserError;
+
+            // Familie in der 'families'-Tabelle anlegen
+            const { error: insertFamilyError } = await supabase
+                .from('families')
+                .insert([
+                    {
+                        familycode: familyCode,
+                        createdby: user.id,
+                        members: JSON.stringify({ [user.id]: true }),
+                        createdat: new Date().toISOString(),
+                    },
+                ]);
+
+            if (insertFamilyError) throw insertFamilyError;
+
+            router.push('/dashboard');
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+
+    return (
+        <div className="flex flex-col items-center justify-center h-screen p-4">
+            <div className="p-8 max-w-md w-full">
+                <h1 className="text-4xl mb-6 text-center">Registrieren</h1>
+                <form onSubmit={handleRegister} className="space-y-4">
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-silver-500"
+                        required
+                    />
+                    <input
+                        type="password"
+                        placeholder="Passwort"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-silver-500"
+                        required
+                    />
+                    <input
+                        type="text"
+                        placeholder="Familienname"
+                        value={familyName}
+                        onChange={(e) => setFamilyName(e.target.value)}
+                        className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-silver-500"
+                        required
+                    />
+                    <button
+                        type="button"
+                        onClick={generateFamilyCode}
+                        className="w-full p-3 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    >
+                        Familiencode generieren
+                    </button>
+                    {familyCode && (
+                        <p className="text-green-500 text-center">
+                            Ihr Familiencode: {familyCode}
+                        </p>
+                    )}
+                    {error && <p className="text-red-500 text-center">{error}</p>}
+                    <button
+                        type="submit"
+                        className="w-full p-3 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    >
+                        Jetzt registrieren
+                    </button>
+                </form>
+            </div>
+        </div>
+    );
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import supabase from '../../utils/supabaseClient'; 
+import supabase from 'src/utils/supabase/client.js'; // Verwende den Supabase-Client
 
 const ChatWindow = ({ chatId }) => {
   const [messages, setMessages] = useState([]);

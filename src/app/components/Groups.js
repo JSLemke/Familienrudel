@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import supabase from '../../utils/supabaseClient';
+import supabase from 'src/utils/supabase/client.js'; // Verwende den Supabase-Client
 
 const Groups = () => {
   const [groups, setGroups] = useState([]);

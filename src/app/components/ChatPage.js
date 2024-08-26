@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import supabase from '../../utils/supabaseClient';
-import Picker from 'emoji-picker-react';
+import createClientInstance from 'src/utils/supabase/client.js';
 
 export default function ChatPage({ receiverId }) {
   const [messages, setMessages] = useState([]);
@@ -10,6 +9,8 @@ export default function ChatPage({ receiverId }) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [userId, setUserId] = useState(null);
   const [userData, setUserData] = useState({});
+
+  const supabase = createClientInstance();
 
   useEffect(() => {
     const fetchUserId = async () => {
@@ -35,8 +36,8 @@ export default function ChatPage({ receiverId }) {
       const { data, error } = await supabase
         .from('messages')
         .select('*')
-        .order('created_at', { ascending: true })
-        .eq('receiver_id', receiverId);
+        .eq('receiver_id', receiverId)
+        .order('sent_at', { ascending: true });
 
       if (error) {
         console.error('Fehler beim Abrufen der Nachrichten:', error.message);
@@ -48,7 +49,7 @@ export default function ChatPage({ receiverId }) {
     fetchMessages();
 
     const messageSubscription = supabase
-      .channel('messages-channel')
+      .channel('public:messages')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
         setMessages((prevMessages) => [...prevMessages, payload.new]);
       })
@@ -57,23 +58,23 @@ export default function ChatPage({ receiverId }) {
     return () => {
       supabase.removeChannel(messageSubscription);
     };
-  }, [receiverId]);
+  }, [receiverId, supabase]);
 
   const handleSendMessage = async () => {
     if (newMessage.trim() && userId) {
       const { error } = await supabase
         .from('messages')
-        .insert([{ 
-          sender_id: userId,  
-          receiver_id: receiverId, 
+        .insert([{
+          sender_id: userId,  // Setze die sender_id auf die aktuelle Benutzer-ID
+          receiver_id: receiverId, // Die receiver_id wird als Prop übergeben
           content: newMessage,
-          created_at: new Date(), 
+          sent_at: new Date(), // sent_at wird manuell gesetzt
         }]);
 
       if (error) {
         console.error('Fehler beim Senden der Nachricht:', error.message);
       } else {
-        setNewMessage(''); 
+        setNewMessage(''); // Nach dem Senden des Textes das Eingabefeld leeren
         setShowEmojiPicker(false);
       }
     }
@@ -91,7 +92,7 @@ export default function ChatPage({ receiverId }) {
           <div key={message.id} className="message mb-4 flex items-start">
             <div>
               <p className="text-sm font-semibold">
-                {message.sender_id === userId ? 'You' : 'Other User'}
+                {message.sender_id === userId ? 'Du' : 'Andere Person'}
               </p>
               <p className="bg-gray-700 p-2 rounded-lg text-sm">{message.content}</p>
             </div>
@@ -104,7 +105,7 @@ export default function ChatPage({ receiverId }) {
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           className="p-2 w-full rounded bg-gray-700 border border-gray-600 text-white focus:outline-none"
-          placeholder="Type a message"
+          placeholder="Nachricht eingeben"
         />
         <button
           onClick={() => setShowEmojiPicker(!showEmojiPicker)}
@@ -114,14 +115,14 @@ export default function ChatPage({ receiverId }) {
         </button>
         {showEmojiPicker && (
           <div className="absolute bottom-12 right-0 z-10">
-            <Picker onEmojiClick={handleEmojiClick} />
+            {/* Emoji Picker Component */}
           </div>
         )}
         <button
           onClick={handleSendMessage}
           className="mt-2 p-2 w-full bg-blue-500 rounded text-white hover:bg-blue-600"
         >
-          Send
+          Senden
         </button>
       </div>
     </div>

@@ -1,9 +1,11 @@
+// src/app/components/TasksPreview.js
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import supabase from '../../utils/supabaseClient';
+import createClientInstance from 'src/utils/supabase/client.js';
 
 export default function TasksPreview() {
+    const supabase = createClientInstance();
     const [tasks, setTasks] = useState([]);
 
     useEffect(() => {
@@ -28,7 +30,7 @@ export default function TasksPreview() {
             <ul>
                 {tasks.slice(0, 3).map((task, index) => (
                     <li key={index} className="mb-2">
-                        {task.content}
+                        {task.task}
                     </li>
                 ))}
             </ul>

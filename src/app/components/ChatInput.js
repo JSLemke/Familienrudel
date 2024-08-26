@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import supabase from '../../utils/supabaseClient'; 
+import supabase from 'src/utils/supabase/client.js'; // Korrekte Importpfad für Supabase
 
 const ChatInput = ({ chatId }) => {
   const [message, setMessage] = useState('');

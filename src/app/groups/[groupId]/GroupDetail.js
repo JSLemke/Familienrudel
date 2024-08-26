@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import supabase from '../../../utils/supabaseClient';
+import supabase from 'src/utils/supabase/client.js';
 import { useRouter } from 'next/navigation';
 import Modal from '../../components/Modal';
 
@@ -26,7 +26,7 @@ export default function GroupDetail({ groupId }) {
         console.error('Group not found', error.message);
         router.push('/');
       } else {
-        console.log('Fetched group:', data);  
+        console.log('Fetched group:', data);  // Debugging Information
         setGroup(data);
       }
     };

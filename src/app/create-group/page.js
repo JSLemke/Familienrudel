@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import supabase from '../../utils/supabaseClient';
+import supabase from 'src/utils/supabase/client.js';
 
 export default function CreateGroup() {
   const [groupName, setGroupName] = useState('');
@@ -27,13 +27,13 @@ export default function CreateGroup() {
       const groupData = {
         familyCode: newFamilyCode,
         createdBy: user.id,
-        members: JSON.stringify({ [user.id]: true }), 
+        members: JSON.stringify({ [user.id]: true }), // JSON-Format für members
         createdAt: new Date(),
       };
 
       const { error } = await supabase.from('families').insert([groupData]);
       
-   
+      // Prüfen ob die Einfügung erfolgreich war
       if (error) {
         console.error("Error inserting into families table:", error.message);
         setError("Error creating family group: " + error.message);

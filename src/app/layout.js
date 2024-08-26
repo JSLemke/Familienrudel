@@ -1,19 +1,34 @@
+// src/app/layout.js
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
+import { usePathname } from 'next/navigation';
 import './globals.css';
 
 export default function RootLayout({ children }) {
-  return (
-    <html lang="en">
-      <body>
-        <div className="flex-1">
-          <Navbar />
-          <main className="p-4 h-full overflow-y-auto">{children}</main>
-        </div>
-      </body>
-    </html>
-  );
+    const pathname = usePathname();
+    const [showSidebar, setShowSidebar] = useState(false);
+
+    useEffect(() => {
+        // Sidebar wird nur angezeigt, wenn der Pfad nicht '/login' oder '/register' ist
+        setShowSidebar(!['/login', '/register'].includes(pathname));
+    }, [pathname]);
+
+    return (
+        <html lang="en">
+            <body>
+                <div className="flex h-screen overflow-hidden">
+                    {showSidebar && <Sidebar />}
+                    <div className="flex-1 flex flex-col">
+                        <Navbar />
+                        <main className="flex-1 p-8 overflow-y-auto">
+                            {children}
+                        </main>
+                    </div>
+                </div>
+            </body>
+        </html>
+    );
 }
