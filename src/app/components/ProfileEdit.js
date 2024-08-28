@@ -1,37 +1,36 @@
-'use client';
-
 import React, { useState, useEffect } from 'react';
-import getSupabaseClient from 'src/utils/supabase/client.js';
+import createClientInstance from 'src/utils/supabase/client.js';
+import UploadAvatar from './UploadAvatar';
 
 export default function ProfileEdit() {
   const [nickname, setNickname] = useState('');
-  const [photoURL, setPhotoURL] = useState('');
   const [email, setEmail] = useState('');
   const [bio, setBio] = useState('');
-  const [file, setFile] = useState(null);
+  const [photoURL, setPhotoURL] = useState('');
+  const [userId, setUserId] = useState(null);
+  const supabase = createClientInstance();
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const supabase = getSupabaseClient();
       const { data: { user }, error: userError } = await supabase.auth.getUser();
-      
       if (userError) {
-        console.error('Fehler beim Abrufen des Benutzers', userError.message);
+        console.error('Error fetching user:', userError.message);
         return;
       }
 
       if (user) {
+        setUserId(user.id);
         const { data, error } = await supabase
           .from('users')
           .select('*')
           .eq('id', user.id)
           .single();
-          
+
         if (error) {
-          console.error('Benutzerdaten nicht gefunden', error.message);
+          console.error('Error fetching user data:', error.message);
         } else {
           setNickname(data.nickname);
-          setPhotoURL(`${supabase.storageUrl}/profile-pictures/${data.photo_url}`);
+          setPhotoURL(data.photo_url || '/default-profile.png');
           setEmail(data.email);
           setBio(data.bio);
         }
@@ -39,58 +38,35 @@ export default function ProfileEdit() {
     };
 
     fetchUserData();
-  }, []);
-
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
-  };
+  }, [supabase]);
 
   const handleSave = async () => {
-    const supabase = getSupabaseClient();
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
-    
-    if (userError) {
-      console.error('Fehler beim Abrufen des Benutzers', userError.message);
-      return;
+    if (!userId) return;
+
+    const { error } = await supabase
+      .from('users')
+      .update({
+        nickname,
+        photo_url: photoURL, // Make sure this is set correctly
+        email,
+        bio
+      })
+      .eq('id', userId);
+
+    if (error) {
+      console.error('Error saving profile:', error.message);
+    } else {
+      alert('Profile updated successfully');
     }
+  };
 
-    let uploadedPhotoURL = photoURL;
-
-    if (file) {
-      const { data, error } = await supabase.storage
-        .from('profile-pictures')
-        .upload(`public/${user.id}/${file.name}`, file);
-
-      if (error) {
-        console.error('Fehler beim Hochladen des Bildes', error.message);
-        return;
-      }
-
-      uploadedPhotoURL = `${supabase.storageUrl}/profile-pictures/public/${user.id}/${file.name}`;
-    }
-
-    if (user) {
-      const { error } = await supabase
-        .from('users')
-        .update({
-          nickname,
-          photo_url: uploadedPhotoURL,
-          email,
-          bio
-        })
-        .eq('id', user.id);
-        
-      if (error) {
-        console.error('Fehler beim Speichern des Profils', error.message);
-      } else {
-        alert('Profil erfolgreich aktualisiert');
-      }
-    }
+  const handleAvatarChange = (url) => {
+    setPhotoURL(url); // Set the new photoURL
   };
 
   return (
     <div className="profile-edit p-8">
-      <h1 className="text-3xl mb-4">Profil bearbeiten</h1>
+      <h1 className="text-3xl mb-4">Edit Profile</h1>
       <div className="space-y-4">
         <input
           type="text"
@@ -112,21 +88,13 @@ export default function ProfileEdit() {
           onChange={(e) => setBio(e.target.value)}
           className="w-full p-3 border border-gray-300 rounded focus:outline-none"
         />
-        <div>
-          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            Profilbild hochladen
-          </label>
-          <input
-            type="file"
-            onChange={handleFileChange}
-            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer focus:outline-none"
-          />
-        </div>
+        {userId && <UploadAvatar userId={userId} onUpload={handleAvatarChange} />}
+        {photoURL && <img src={photoURL} alt="Avatar" className="mt-4 rounded-full w-24 h-24 object-cover" />}
         <button
           onClick={handleSave}
           className="p-3 bg-blue-500 text-white rounded hover:bg-blue-600"
         >
-          Speichern
+          Save
         </button>
       </div>
     </div>

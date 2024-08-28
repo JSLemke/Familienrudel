@@ -104,7 +104,6 @@ export default function FamilyDashboard() {
 
     return (
         <div className="family-dashboard p-8">
-            <h1 className="text-3xl mb-4">Familiendashboard</h1>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <div className="bg-gray-100 p-4 mb-4 rounded flex items-center justify-between">
                 <div>

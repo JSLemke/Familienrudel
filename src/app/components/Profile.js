@@ -1,18 +1,20 @@
+'use client';
 import React, { useState, useEffect } from 'react';
-import supabase from 'src/utils/supabase/client.js';
+import createClientInstance from 'src/utils/supabase/client.js';
 
 export default function Profile() {
   const [nickname, setNickname] = useState('');
   const [photoURL, setPhotoURL] = useState('');
   const [email, setEmail] = useState('');
   const [bio, setBio] = useState('');
+  const supabase = createClientInstance();
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      const { data: { user }, error } = await supabase.auth.getUser();
 
-      if (userError) {
-        console.error('Fehler beim Abrufen des Benutzers', userError.message);
+      if (error) {
+        console.error('Fehler beim Abrufen des Benutzers:', error.message);
         return;
       }
 
@@ -24,23 +26,18 @@ export default function Profile() {
           .single();
 
         if (error) {
-          console.error('Fehler beim Abrufen der Benutzerdaten', error.message);
+          console.error('Fehler beim Abrufen der Benutzerdaten:', error.message);
         } else {
-          setNickname(data.nickname || '');
-          setEmail(data.email || '');
-          setBio(data.bio || '');
-
-          if (data.photo_url) {
-            setPhotoURL(data.photo_url);
-          } else {
-            setPhotoURL('/default-profile.png'); // Fallback auf ein Standardbild
-          }
+          setNickname(data.nickname);
+          setEmail(data.email);
+          setBio(data.bio);
+          setPhotoURL(data.photo_url || '/default-profile.png');
         }
       }
     };
 
     fetchUserData();
-  }, []);
+  }, [supabase]);
 
   return (
     <div className="profile p-8">

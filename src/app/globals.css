@@ -119,4 +119,24 @@ ul li:hover {
 .addBtn:hover {
   background: #007B9A;
 }
-
+.profile {
+  background-color: silver;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 50vh;
+  width: 50vw;
+  color: black;
+  border-radius: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 5px;
+}
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+}

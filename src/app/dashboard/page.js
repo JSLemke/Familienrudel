@@ -14,6 +14,7 @@ import Settings from '../components/Settings';
 import ContactList from '../components/ContactList';
 import Invite from '../components/Invite';
 import createClientInstance from 'src/utils/supabase/client.js';
+import UserCard from '../components/UserCard';
 
 export default function DashboardPage() {
     const [currentPage, setCurrentPage] = useState('home');

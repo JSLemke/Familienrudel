@@ -5,6 +5,8 @@ export async function updateUser(request) {
     const token = request.cookies.get('supabase-token');
     
     if (token) {
+        console.log('Token gefunden:', token); // Debugging
+
         const { data, error } = await supabase.auth.getUser(token);
 
         if (error) {
@@ -14,9 +16,19 @@ export async function updateUser(request) {
 
         const { user } = data;
 
-        // Refresh the Auth token
-        const { data: newToken } = await supabase.auth.refreshSession({ refresh_token: token });
+        // Token-Aktualisierung
+        const { data: newToken, error: refreshError } = await supabase.auth.refreshSession({ refresh_token: token });
+        
+        if (refreshError) {
+            console.error('Fehler beim Aktualisieren des Tokens:', refreshError.message);
+            return;
+        }
+
+        console.log('Neues Token erhalten:', newToken); // Debugging
+
         request.cookies.set('supabase-token', newToken.refresh_token);
         return { user, token: newToken.refresh_token };
+    } else {
+        console.warn('Kein Token gefunden'); // Debugging
     }
 }
