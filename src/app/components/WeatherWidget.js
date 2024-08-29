@@ -50,7 +50,7 @@ export default function WeatherWidget() {
             // Add more mappings based on weather codes
         };
 
-        return weatherIcons[code] || 'public/globe-connected.ico';
+        return weatherIcons[code] || '🌁'; // Default icon if no match is found, e.g. globe-connected.ico';
     };
 
     return (
