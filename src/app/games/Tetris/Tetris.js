@@ -12,9 +12,20 @@ function Tetris() {
   useEffect(() => {
     const canvas = canvasRef.current;
     const ucanvas = upcomingRef.current;
-    ctx = canvas.getContext('2d');
-    uctx = ucanvas.getContext('2d');
-    run();
+    
+    // Überprüfen, ob die Referenzen existieren
+    if (canvas && ucanvas) {
+      ctx = canvas.getContext('2d');
+      uctx = ucanvas.getContext('2d');
+      run();
+    }
+
+    // Event Listener für das Resizing hinzufügen
+    window.addEventListener('resize', resize, false);
+
+    return () => {
+      window.removeEventListener('resize', resize);
+    };
   }, []);
 
   const KEY = { ESC: 27, SPACE: 32, LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40 };
@@ -32,11 +43,11 @@ function Tetris() {
   const ny = 20;
   const nu = 5;
 
-  // Stärkere Verlangsamung der Spielgeschwindigkeit
+  // Spielgeschwindigkeit
   const speed = {
-    start: 90.0, // Noch langsameres Spiel, eventuell weiter erhöhen, z.B. 3.0
-    decrement: 0.001, // Sehr langsame Steigerung der Geschwindigkeit
-    min: 0.5, // Mindestgeschwindigkeit
+    start: 90.0,
+    decrement: 0.001,
+    min: 0.5,
   };
 
   let dx, dy, blocks, actions, playing, dt, current, next, score, vscore, rows, step;
@@ -109,18 +120,19 @@ function Tetris() {
 
   function addEvents() {
     document.addEventListener('keydown', keydown, false);
-    window.addEventListener('resize', resize, false);
   }
 
   function resize() {
-    canvasRef.current.width = canvasRef.current.clientWidth;
-    canvasRef.current.height = canvasRef.current.clientHeight;
-    upcomingRef.current.width = upcomingRef.current.clientWidth;
-    upcomingRef.current.height = upcomingRef.current.clientHeight;
-    dx = canvasRef.current.width / nx;
-    dy = canvasRef.current.height / ny;
-    invalidate();
-    invalidateNext();
+    if (canvasRef.current && upcomingRef.current) {
+      canvasRef.current.width = canvasRef.current.clientWidth;
+      canvasRef.current.height = canvasRef.current.clientHeight;
+      upcomingRef.current.width = upcomingRef.current.clientWidth;
+      upcomingRef.current.height = upcomingRef.current.clientHeight;
+      dx = canvasRef.current.width / nx;
+      dy = canvasRef.current.height / ny;
+      invalidate();
+      invalidateNext();
+    }
   }
 
   function keydown(ev) {
@@ -362,7 +374,7 @@ function Tetris() {
   function draw() {
     ctx.save();
     ctx.lineWidth = 1;
-    ctx.translate(0.5, 0.5); // for crisp 1px black lines
+    ctx.translate(0.5, 0.5); // für scharfe 1px schwarze Linien
     drawCourt();
     drawNext();
     drawScore();
@@ -381,14 +393,14 @@ function Tetris() {
           if (block) drawBlock(ctx, x, y, block.color);
         }
       }
-      ctx.strokeRect(0, 0, nx * dx - 1, ny * dy - 1); // court boundary
+      ctx.strokeRect(0, 0, nx * dx - 1, ny * dy - 1); // Spielfeldbegrenzung
       invalid.court = false;
     }
   }
 
   function drawNext() {
     if (invalid.next) {
-      const padding = (nu - next.type.size) / 2; // half-arsed attempt at centering next piece display
+      const padding = (nu - next.type.size) / 2; // Einfacher Versuch, die Anzeige des nächsten Stücks zu zentrieren
       uctx.save();
       uctx.translate(0.5, 0.5);
       uctx.clearRect(0, 0, nu * dx, nu * dy);
@@ -428,7 +440,7 @@ function Tetris() {
 
   function frame() {
     const now = timestamp();
-    update(Math.min(1, (now - dt) / 1000.0)); // using requestAnimationFrame have to be able to handle large delta's caused when it 'hibernates' in a background or non-visible tab
+    update(Math.min(1, (now - dt) / 1000.0)); // requestAnimationFrame muss große Deltas verarbeiten können, die auftreten, wenn es im Hintergrund oder in einem nicht sichtbaren Tab "hiberniert"
     draw();
     if (!isPaused) {
       requestAnimationFrame(frame);
@@ -438,7 +450,7 @@ function Tetris() {
   function togglePause() {
     setIsPaused(!isPaused);
     if (!isPaused) {
-      frame(); // Resume the game loop
+      frame(); // Spielschleife fortsetzen
     }
   }
 

@@ -44,7 +44,7 @@ export default function Navbar() {
                 </div>
                 
                 <div className="flex items-center space-x-4">
-                    <button onClick={handleLogout} className="bg-red-500 text-white p-2 rounded">
+                    <button onClick={handleLogout} className="bg-gradient-to-r from-black to-gray-200 text-white p-2 rounded">
                         Logout
                     </button>
                 </div>

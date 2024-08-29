@@ -25,8 +25,8 @@ export default function ShoppingListPreview() {
     }, []);
 
     return (
-        <div className="p-4 bg-white-100 rounded-lg shadow-md">
-            <h2 className="text-xl font-bold mb-2">Einkaufsliste</h2>
+        <div className="p-4 bg-gradient-to-r from-black to-white rounded-lg shadow-md">
+            <h2 className="text-xl font-bold mb-2 text-zinc-100">Einkaufsliste</h2>
             <ul>
                 {shoppingList.slice(0, 3).map((item, index) => (
                     <li key={index} className="mb-2">

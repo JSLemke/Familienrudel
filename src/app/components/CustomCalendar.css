@@ -1,0 +1,64 @@
+.custom-calendar {
+    border: none;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(145deg, #cfcfcf, #e5e5e5); /* Silbergrauer Verlauf */
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2); /* Heller Schatten */
+}
+
+.custom-calendar .react-calendar__navigation button {
+    color: #333;
+    background-color: #cfcfcf;
+    border-radius: 8px;
+    margin: 2px;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease;
+}
+
+.custom-calendar .react-calendar__navigation button:hover {
+    background-color: #b0b0b0;
+}
+
+.custom-calendar .react-calendar__tile {
+    border-radius: 10px;
+    background: #e5e5e5;
+    padding: 10px;
+    color: #333;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.custom-calendar .react-calendar__tile--now {
+    background: #ff9800;
+    color: white;
+    border-radius: 10px;
+}
+
+.custom-calendar .react-calendar__tile--active {
+    background: #2196f3;
+    color: white;
+    border-radius: 10px;
+}
+
+.custom-calendar .react-calendar__tile--active:hover,
+.custom-calendar .react-calendar__tile--active:focus {
+    background: #1e88e5;
+}
+
+.custom-calendar .react-calendar__tile--weekend {
+    background-color: #f0f0f0;
+}
+
+.custom-calendar .react-calendar__month-view__days__day--sunday,
+.custom-calendar .react-calendar__month-view__days__day--holiday {
+    color: red;
+}
+
+.custom-calendar .react-calendar__month-view__days__day--saturday {
+    color: gray;
+}
+
+.custom-calendar abbr[title] {
+    text-decoration: none;
+}

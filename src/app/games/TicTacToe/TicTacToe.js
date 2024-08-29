@@ -44,7 +44,7 @@ function TicTacToe() {
                 {board.map((value, index) => (
                     <div 
                         key={index} 
-                        className="tictactoe-cell" 
+                        className={`tictactoe-cell ${value ? 'filled' : ''}`} 
                         onClick={() => handleClick(index)}
                     >
                         {value}

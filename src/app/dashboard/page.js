@@ -1,6 +1,7 @@
+// DashboardPage.js
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import FamilyDashboard from '../components/FamilyDashboard';
 import Profile from '../components/Profile';
@@ -17,43 +18,12 @@ import Tetris from '../games/Tetris/Tetris';
 import Memory from '../games/Memory/Memory';
 import TicTacToe from '../games/TicTacToe/TicTacToe';
 import createClientInstance from 'src/utils/supabase/client.js';
-import UserCard from '../components/UserCard';
 
 export default function DashboardPage() {
     const [currentPage, setCurrentPage] = useState('home');
-    const [isClient, setIsClient] = useState(false);
-    const [families, setFamilies] = useState([]);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        setIsClient(true);
-
-        async function fetchFamilies() {
-            try {
-                const supabase = createClientInstance();
-                const response = await supabase
-                    .from('families')
-                    .select('familycode, createdby');
-
-                if (response.error) {
-                    throw new Error('Error fetching families');
-                }
-
-                setFamilies(response.data);
-            } catch (err) {
-                setError('Fehler beim Abrufen der Familien: ' + err.message);
-                console.error(err);
-            }
-        }
-
-        fetchFamilies();
-    }, []);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const renderContent = () => {
-        if (!isClient) {
-            return <div>Lade...</div>;
-        }
-
         switch (currentPage) {
             case 'profile':
                 return <Profile />;
@@ -83,24 +53,26 @@ export default function DashboardPage() {
                 return <TicTacToe />;
             case 'home':
             default:
-                return (
-                    <div>
-                        <FamilyDashboard />
-                        <h2>Families</h2>
-                        {error && <p className="text-red-500">{error}</p>}
-                        <ul>
-                            {families.map((family) => (
-                                <li key={family.familycode}>{family.familycode}</li>
-                            ))}
-                        </ul>
-                    </div>
-                );
+                return <FamilyDashboard />;
         }
     };
 
     return (
         <div className="flex h-screen overflow-hidden">
-            <Sidebar setCurrentPage={setCurrentPage} />
+            {/* Hamburger Menu Button */}
+            <div className="md:hidden fixed top-4 left-4 z-50">
+                <button
+                    onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                    className="text-white bg-gradient-to-tr from-black to-gray-200 p-3 rounded-md"
+                >
+                    ☰
+                </button>
+            </div>
+
+            {/* Sidebar Component */}
+            <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} setCurrentPage={setCurrentPage} />
+
+            {/* Main Content Area */}
             <div className="flex-1 p-8 overflow-y-auto">
                 {renderContent()}
             </div>

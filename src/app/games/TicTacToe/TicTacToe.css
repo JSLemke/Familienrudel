@@ -1,41 +1,62 @@
-/* src/app/components/games/TicTacToe.css */
-
 .tictactoe-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-    background-color: rgba(119, 136, 153, 0);
+    padding: 20px;
+    background: linear-gradient(to right, #cfcfcf, #e5e5e5); /* Silbergrauer Verlauf */
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2); /* Heller Schatten */
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.tictactoe-status {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
 }
 
 .tictactoe-board {
     display: grid;
-    grid-template-columns: repeat(3, 100px);
-    grid-template-rows: repeat(3, 100px);
-    gap: 5px;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 10px;
 }
 
 .tictactoe-cell {
     width: 100px;
     height: 100px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgb(78, 85, 120);
-    color: white;
-    font-size: 2em;
+    font-size: 36px;
+    font-weight: bold;
+    color: #333;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2); /* Heller Schatten */
+    transition: background-color 0.3s ease, transform 0.3s ease;
     cursor: pointer;
-    border-radius: 10px;
-    transition: background-color 0.3s;
 }
 
 .tictactoe-cell:hover {
-    background-color: #555;
+    background-color: #e5e5e5;
+    transform: scale(1.05);
 }
 
-.tictactoe-status {
-    margin-top: 20px;
-    font-size: 1.5em;
-    color: #eee;
+.tictactoe-cell.filled {
+    cursor: not-allowed;
+}
+
+.tictactoe-cell.filled.X {
+    color: #53595f;
+}
+
+.tictactoe-cell.filled.O {
+    color: #4682b4;
+}
+
+.tictactoe-cell:active {
+    transform: scale(0.95);
 }

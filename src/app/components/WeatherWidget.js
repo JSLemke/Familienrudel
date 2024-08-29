@@ -50,20 +50,20 @@ export default function WeatherWidget() {
             // Add more mappings based on weather codes
         };
 
-        return weatherIcons[code] || '🌁'; // Default icon if no match is found, e.g. globe-connected.ico';
+        return weatherIcons[code] || '🌦️'; // Default neutral weather icon
     };
 
     return (
-        <div className="p-8 bg-blue-100 rounded-lg shadow-md text-center">
-            <h2 className="text-xl font-bold mb-2">Wetter</h2>
+        <div className="p-12 bg-gradient-to-r from-blue-600 via-blue-500 to-gray-200 rounded-xl shadow-lg text-center max-w-sm mx-auto">
+            <h2 className="text-3xl font-extrabold mb-4 text-white">Wetter</h2>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {weather ? (
                 <div>
-                    <div className="text-5xl">{getWeatherIcon(weather.weathercode)}</div>
-                    <p className="text-3xl">{weather.temperature}°C</p>
+                    <div className="text-7xl mb-2">{getWeatherIcon(weather.weathercode)}</div>
+                    <p className="text-5xl font-semibold text-white">{weather.temperature}°C</p>
                 </div>
             ) : (
-                <p>Lade Wetterdaten...</p>
+                <p className="text-xl text-white">Lade Wetterdaten...</p>
             )}
         </div>
     );

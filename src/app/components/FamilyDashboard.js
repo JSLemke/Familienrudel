@@ -104,16 +104,16 @@ export default function FamilyDashboard() {
     }; 
 
     return (
-        <div className="family-dashboard p-8">
+        <div className="family-dashboard p-2 ">
             {error && <p style={{ color: 'red' }}>{error}</p>}
-            <div className="bg-gray-100 p-4 mb-4 rounded flex items-center justify-between">
+            <div className="bg-gray-100 p-2 mb-2 rounded flex items-center justify-between">
                 <div>
                     <h2 className="text-xl font-semibold">Familie:</h2>
                     <p className="text-lg">{familyCode || 'Kein Familiencode zugeordnet'}</p>
                 </div>
                 <ChatIcon />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-2 gap-2">
                 <MiniCalendar />
                 <WeatherWidget />
                 <TasksPreview />
