@@ -6,18 +6,15 @@ export function createClient(req, res) {
             process.env.NEXT_PUBLIC_SUPABASE_URL,
             process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
             {
+                auth: {
+                    persistSession: false, // Manuelles Persistieren der Session vermeiden
+                },
                 global: {
                     headers: { 'x-forwarded-host': req.headers['x-forwarded-host'] },
                 },
-                auth: {
-                    storage: {
-                        getItem: (key) => req.cookies[key],
-                        setItem: (key, value) => res.cookie(key, value),
-                        removeItem: (key) => res.clearCookie(key),
-                    },
-                },
             }
         );
+
         console.log('Supabase Client erfolgreich erstellt');
         return client;
     } catch (error) {

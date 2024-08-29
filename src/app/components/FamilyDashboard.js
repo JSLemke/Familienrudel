@@ -8,6 +8,7 @@ import ShoppingListPreview from './ShoppingListPreview';
 import ChatIcon from './ChatIcon';
 import dynamic from 'next/dynamic';
 import createClient from 'src/utils/supabase/client.js';
+import TicTacToe from '../games/TicTacToe/TicTacToe';
 
 const MiniMap = dynamic(() => import('./MiniMap'), { ssr: false });
 
@@ -118,6 +119,7 @@ export default function FamilyDashboard() {
                 <TasksPreview />
                 <ShoppingListPreview />
                 <MiniMap />
+                <TicTacToe />
             </div>
         </div>
     );

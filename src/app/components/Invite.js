@@ -1,31 +1,72 @@
 'use client';
 
 import { useState } from 'react';
+import Cookies from 'js-cookie';
 
 export default function Invite() {
-  const [inviteCode, setInviteCode] = useState('');
+  const [inviteLink, setInviteLink] = useState('');
 
-  const generateInviteCode = async () => {
+  const generateInviteLink = async () => {
+    const familyId = Cookies.get('familyId'); // Holt die familyId aus dem Cookie
+
+    if (!familyId) {
+      console.error('Family ID is not set');
+      return;
+    }
+
     try {
-      const response = await fetch('http://localhost:3001/generateInviteCode', {
+      const response = await fetch('/api/generateInviteLink', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ uid: 'your-uid-here' }),
+        body: JSON.stringify({ uid: familyId }),
       });
 
       const data = await response.json();
-      setInviteCode(data.inviteCode);
+      if (data.error) {
+        console.error('Fehler beim Generieren des Einladungslinks:', data.error);
+      } else {
+        setInviteLink(data.inviteLink);
+      }
     } catch (error) {
-      console.error('Error generating invite code:', error.message);
+      console.error('Fehler beim Generieren des Einladungslinks:', error.message);
     }
   };
 
   return (
-    <div>
-      <button onClick={generateInviteCode}>Generate Invite Code</button>
-      {inviteCode && <p>Your invite code: {inviteCode}</p>}
+    <div style={{ color: 'white' }}>
+      <button
+        onClick={generateInviteLink}
+        style={{
+          backgroundColor: '#007BFF',
+          color: '#FFF',
+          padding: '10px 20px',
+          borderRadius: '5px',
+          border: 'none',
+          cursor: 'pointer',
+        }}
+      >
+        Generate Invite Link
+      </button>
+      {inviteLink && (
+        <div style={{ marginTop: '20px', color: 'white' }}>
+          <p>Your invite link:</p>
+          <input
+            type="text"
+            value={inviteLink}
+            readOnly
+            style={{
+              width: '100%',
+              padding: '10px',
+              borderRadius: '5px',
+              border: '1px solid #CCC',
+              backgroundColor: '#333',
+              color: '#FFF',
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }

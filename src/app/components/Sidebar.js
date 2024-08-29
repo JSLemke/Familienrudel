@@ -29,7 +29,7 @@ export default function Sidebar({ setCurrentPage }) {
                 </a>
                 <a onClick={() => setCurrentPage('gps')} className="block px-4 py-2 rounded hover:bg-gray-600 cursor-pointer">
                     LiveMap
-                                    </a>
+                </a>
                 <a onClick={() => setCurrentPage('settings')} className="block px-4 py-2 rounded hover:bg-gray-600 cursor-pointer">
                     Dashboard Bearbeiten
                 </a>
@@ -38,6 +38,15 @@ export default function Sidebar({ setCurrentPage }) {
                 </a>
                 <a onClick={() => setCurrentPage('invite')} className="block px-4 py-2 rounded hover:bg-gray-600 cursor-pointer">
                     Einladen
+                </a>
+                <a onClick={() => setCurrentPage('tictactoe')} className="block px-4 py-2 rounded hover:bg-gray-600 cursor-pointer">
+                    TicTacToe
+                </a>
+                <a onClick={() => setCurrentPage('memory')} className="block px-4 py-2 rounded hover:bg-gray-600 cursor-pointer">
+                    Memory
+                </a>
+                <a onClick={() => setCurrentPage('tetris')} className="block px-4 py-2 rounded hover:bg-gray-600 cursor-pointer">
+                    Tetris
                 </a>
             </nav>
         </div>

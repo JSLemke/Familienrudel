@@ -9,7 +9,7 @@ export default function MiniCalendar() {
     const [date, setDate] = useState(new Date());
 
     return (
-        <div className="bg-white p-4 rounded shadow">
+        <div className="bg-white p-4 rounded shadow col-span-1 contain-style ">
             <h2 className="text-xl font-bold mb-4">Mini-Kalender</h2>
             <Calendar
                 locale="de-DE" // Lokalisierung auf Deutsch setzen

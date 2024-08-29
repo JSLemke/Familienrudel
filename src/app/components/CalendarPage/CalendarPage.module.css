@@ -1,0 +1,32 @@
+.custom-calendar {
+    background-color: white; /* Hintergrundfarbe des Kalenders */
+    color: black; /* Textfarbe */
+  }
+  
+  .custom-calendar .rbc-event {
+    background-color: #d3d3d3; /* Farbe für Ereignisse */
+    color: black; /* Textfarbe in den Ereignissen */
+  }
+  
+  .custom-calendar .rbc-toolbar {
+    background-color: white; /* Toolbar-Hintergrundfarbe */
+    color: black; /* Toolbar-Textfarbe */
+  }
+  
+  .custom-calendar .rbc-month-view, 
+  .custom-calendar .rbc-time-view,
+  .custom-calendar .rbc-agenda-view {
+    background-color: white; /* Ansichten-Hintergrundfarbe */
+    color: black; /* Ansichten-Textfarbe */
+  }
+  
+  .custom-calendar .rbc-day-bg {
+    background-color: white; /* Hintergrundfarbe der Tage */
+    color: black; /* Textfarbe der Tage */
+  }
+  
+  .custom-calendar .rbc-header {
+    background-color: white; /* Hintergrundfarbe der Überschriften (Tage, Wochen) */
+    color: black; /* Textfarbe der Überschriften */
+  }
+  

@@ -1,7 +1,11 @@
+// Datei: src/app/components/ChatPage.js
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import createClientInstance from 'src/utils/supabase/client.js';
+import dynamic from 'next/dynamic';
+
+const Picker = dynamic(() => import('emoji-picker-react'), { ssr: false });
 
 export default function ChatPage({ receiverId }) {
   const [messages, setMessages] = useState([]);
@@ -115,7 +119,7 @@ export default function ChatPage({ receiverId }) {
         </button>
         {showEmojiPicker && (
           <div className="absolute bottom-12 right-0 z-10">
-            {/* Emoji Picker Component */}
+            <Picker onEmojiClick={handleEmojiClick} />
           </div>
         )}
         <button

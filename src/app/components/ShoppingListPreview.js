@@ -25,7 +25,7 @@ export default function ShoppingListPreview() {
     }, []);
 
     return (
-        <div className="p-4 bg-white rounded-lg shadow-md">
+        <div className="p-4 bg-white-100 rounded-lg shadow-md">
             <h2 className="text-xl font-bold mb-2">Einkaufsliste</h2>
             <ul>
                 {shoppingList.slice(0, 3).map((item, index) => (

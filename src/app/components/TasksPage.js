@@ -79,7 +79,7 @@ export default function TasksPage() {
                     className="p-2 border rounded w-full"
                     placeholder="New Task"
                 />
-                <button onClick={addTask} className="bg-blue-500 text-white p-2 rounded mt-2">
+                <button onClick={addTask} className="bg-gray-500 text-white p-2 rounded mt-2">
                     Add Task
                 </button>
             </div>

@@ -1,32 +1,45 @@
-'use client';
-
 import React, { useEffect, useState } from 'react';
-import supabase from 'src/utils/supabase/client.js'; // Verwende den Supabase-Client
+import createClientInstance from 'src/utils/supabase/client';
 
-const ContactList = () => {
+const ContactList = ({ familyCode = "defaultFamilyCode" }) => {
   const [contacts, setContacts] = useState([]);
 
   useEffect(() => {
     const fetchContacts = async () => {
+      const supabase = createClientInstance(); // Rufe den Supabase-Client ab
+
+      if (!familyCode) {
+        console.error("Family Code is missing!");
+        return;
+      }
+
       const { data, error } = await supabase
         .from('users')
-        .select('*');
+        .select('*')
+        .eq('familycode', familyCode); // Filterung nach dem übergebenen Familiencode
 
-      if (error) console.error('Error fetching contacts:', error.message);
-      else setContacts(data);
+      if (error) {
+        console.error('Error fetching contacts:', error.message);
+      } else {
+        setContacts(data);
+      }
     };
 
     fetchContacts();
-  }, []);
+  }, [familyCode]);
 
   return (
     <div>
       <h2>Kontakte</h2>
-      <ul>
-        {contacts.map((contact) => (
-          <li key={contact.id}>{contact.displayName || contact.email}</li>
-        ))}
-      </ul>
+      {contacts.length > 0 ? (
+        <ul>
+          {contacts.map((contact) => (
+            <li key={contact.id}>{contact.nickname || contact.email}</li>
+          ))}
+        </ul>
+      ) : (
+        <p>Keine Kontakte gefunden oder Familiencode wird geladen...</p>
+      )}
     </div>
   );
 };

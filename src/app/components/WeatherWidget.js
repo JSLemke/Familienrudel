@@ -50,11 +50,11 @@ export default function WeatherWidget() {
             // Add more mappings based on weather codes
         };
 
-        return weatherIcons[code] || '❓';
+        return weatherIcons[code] || 'public/globe-connected.ico';
     };
 
     return (
-        <div className="p-4 bg-white rounded-lg shadow-md text-center">
+        <div className="p-8 bg-blue-100 rounded-lg shadow-md text-center">
             <h2 className="text-xl font-bold mb-2">Wetter</h2>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {weather ? (

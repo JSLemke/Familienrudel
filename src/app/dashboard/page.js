@@ -6,13 +6,16 @@ import FamilyDashboard from '../components/FamilyDashboard';
 import Profile from '../components/Profile';
 import ProfileEdit from '../components/ProfileEdit';
 import ChatPage from '../components/ChatPage';
-import CalendarPage from '../components/CalendarPage';
+import CalendarPage from 'src/app/components/CalendarPage/CalendarPage.js';
 import TasksPage from '../components/TasksPage';
 import ShoppingListPage from '../components/ShoppingListPage';
 import GPSPage from '../components/GPSPage';
-import Settings from '../components/Settings';
+import Settings from 'src/app/components/Settin/Settings.js';
 import ContactList from '../components/ContactList';
 import Invite from '../components/Invite';
+import Tetris from '../games/Tetris/Tetris';
+import Memory from '../games/Memory/Memory';
+import TicTacToe from '../games/TicTacToe/TicTacToe';
 import createClientInstance from 'src/utils/supabase/client.js';
 import UserCard from '../components/UserCard';
 
@@ -72,6 +75,12 @@ export default function DashboardPage() {
                 return <ContactList />;
             case 'invite':
                 return <Invite />;
+            case 'tetris':
+                return <Tetris />;
+            case 'memory':
+                return <Memory />;
+            case 'tictactoe':
+                return <TicTacToe />;
             case 'home':
             default:
                 return (
@@ -88,6 +97,7 @@ export default function DashboardPage() {
                 );
         }
     };
+
     return (
         <div className="flex h-screen overflow-hidden">
             <Sidebar setCurrentPage={setCurrentPage} />
@@ -96,5 +106,4 @@ export default function DashboardPage() {
             </div>
         </div>
     );
-    
 }
