@@ -2,6 +2,10 @@ import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
 export function createClient(req, res) {
     try {
+        // Überprüfen, ob req und req.headers definiert sind
+        const headers = req?.headers ? { 'x-forwarded-host': req.headers['x-forwarded-host'] } : {};
+
+        // Supabase Client erstellen
         const client = createSupabaseClient(
             process.env.NEXT_PUBLIC_SUPABASE_URL,
             process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
@@ -10,7 +14,7 @@ export function createClient(req, res) {
                     persistSession: false, // Manuelles Persistieren der Session vermeiden
                 },
                 global: {
-                    headers: { 'x-forwarded-host': req.headers['x-forwarded-host'] },
+                    headers: headers, // Setzt die Header nur, wenn sie definiert sind
                 },
             }
         );

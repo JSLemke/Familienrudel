@@ -12,7 +12,9 @@ function Logout() {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
 
-      router.push('/login');
+      // Weiterleitung zur spezifischen Login-Seite nach dem Logout
+      router.push('/Login');
+      // Stellen Sie sicher, dass dies der korrekte Pfad für Ihre Login-Komponente ist
     } catch (error) {
       console.error('Error logging out:', error.message);
     }
@@ -27,6 +29,7 @@ function Logout() {
       >
         Confirm Logout
       </button>
+      redirect('/Login');
     </div>
   );
 }

@@ -1,4 +1,3 @@
-// Datei: src/app/components/ChatPage.js
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -40,7 +39,6 @@ export default function ChatPage({ receiverId }) {
       const { data, error } = await supabase
         .from('messages')
         .select('*')
-        .eq('receiver_id', receiverId)
         .order('sent_at', { ascending: true });
 
       if (error) {
@@ -62,25 +60,37 @@ export default function ChatPage({ receiverId }) {
     return () => {
       supabase.removeChannel(messageSubscription);
     };
-  }, [receiverId, supabase]);
+  }, [supabase]);
 
   const handleSendMessage = async () => {
-    if (newMessage.trim() && userId) {
+    if (newMessage.trim() === '') {
+      // Leere Nachrichten werden nicht gesendet
+      return;
+    }
+
+    if (userId) {
       const { error } = await supabase
         .from('messages')
         .insert([{
-          sender_id: userId,  // Setze die sender_id auf die aktuelle Benutzer-ID
-          receiver_id: receiverId, // Die receiver_id wird als Prop übergeben
-          content: newMessage,
-          sent_at: new Date(), // sent_at wird manuell gesetzt
+          sender_id: userId,
+          receiver_id: receiverId || userId,  // Verwende userId als Fallback für receiverId
+          content: newMessage.trim(),
+          sent_at: new Date(),
         }]);
 
       if (error) {
         console.error('Fehler beim Senden der Nachricht:', error.message);
       } else {
-        setNewMessage(''); // Nach dem Senden des Textes das Eingabefeld leeren
+        setNewMessage(''); // Textfeld nach dem Senden leeren
         setShowEmojiPicker(false);
       }
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleSendMessage();
     }
   };
 
@@ -90,8 +100,8 @@ export default function ChatPage({ receiverId }) {
   };
 
   return (
-    <div className="chat-container bg-gray-800 text-white p-4 rounded-lg shadow-lg max-w-md w-full mx-auto mt-6">
-      <div className="chat-box h-96 overflow-y-scroll p-4">
+    <div className="chat-container bg-gradient-to-tr from-gray-700 to-gray-900 text-white p-4 rounded-lg shadow-lg max-w-lg w-full mx-auto mt-6">
+      <div className="chat-box h-80 w-full bg-gray-800 rounded-lg overflow-y-scroll p-4">
         {messages.map((message) => (
           <div key={message.id} className="message mb-4 flex items-start">
             <div>
@@ -108,6 +118,7 @@ export default function ChatPage({ receiverId }) {
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
+          onKeyDown={handleKeyDown} // Enter-Taste zum Senden
           className="p-2 w-full rounded bg-gray-700 border border-gray-600 text-white focus:outline-none"
           placeholder="Nachricht eingeben"
         />
@@ -124,7 +135,7 @@ export default function ChatPage({ receiverId }) {
         )}
         <button
           onClick={handleSendMessage}
-          className="mt-2 p-2 w-full bg-blue-500 rounded text-white hover:bg-blue-600"
+          className="mt-4 p-4 w-full bg-gradient-to-tr from-gray-500 to-gray-600 rounded text-white hover:bg-gray-600"
         >
           Senden
         </button>

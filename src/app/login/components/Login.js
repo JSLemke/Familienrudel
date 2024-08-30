@@ -114,7 +114,7 @@ export default function Login() {
           {error && <p className="text-red-500 text-center">{error}</p>}
         </form>
         <div className="flex justify-between mt-4">
-          <button onClick={handleNavigateToRegister} className="text-white hover:underline">
+          <button onClick={handleNavigateToRegister} className="text-blue-500 hover:underline">
             Noch keinen Account? Jetzt registrieren
           </button>
         </div>

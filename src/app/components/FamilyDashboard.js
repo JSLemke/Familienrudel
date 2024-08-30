@@ -5,13 +5,11 @@ import MiniCalendar from './MiniCalendar';
 import WeatherWidget from './WeatherWidget';
 import TasksPreview from './TasksPreview';
 import ShoppingListPreview from './ShoppingListPreview';
-import ChatIcon from './ChatIcon';
-import dynamic from 'next/dynamic';
-import createClient from 'src/utils/supabase/client.js';
+import MiniMap from './MiniMap';
 import TicTacToe from '../games/TicTacToe/TicTacToe';
-
-const MiniMap = dynamic(() => import('./MiniMap'), { ssr: false });
-
+import ChatIcon from './ChatIcon';
+import createClient from 'src/utils/supabase/client.js';
+import ChatPreview from './ChatPreview';
 export default function FamilyDashboard() {
     const [familyCode, setFamilyCode] = useState('');
     const [userId, setUserId] = useState('');
@@ -67,29 +65,27 @@ export default function FamilyDashboard() {
                 .select('members')
                 .eq('familycode', familyCode)
                 .single();
-    
+
             if (fetchError) {
                 setError('Fehler beim Abrufen der Familienmitglieder: ' + fetchError.message);
                 console.error(fetchError.message);
                 return;
             }
-    
+
             let members = family?.members;
-    
-            // Stelle sicher, dass members ein Objekt ist
-            if (typeof members !== 'object' || members === null) {
-                console.error('Erwartetes Objekt, aber etwas anderes gefunden');
-                members = {};  // Setze es auf ein leeres Objekt
+
+            if (!members) {
+                members = {};
             }
-    
+
             if (!members[userId]) {
                 members[userId] = true;
-    
+
                 const { error: updateError } = await supabase
                     .from('families')
                     .update({ members })
                     .eq('familycode', familyCode);
-    
+
                 if (updateError) {
                     setError('Fehler beim Hinzufügen des Benutzers zur Familien-Tabelle: ' + updateError.message);
                     console.error(updateError.message);
@@ -101,25 +97,36 @@ export default function FamilyDashboard() {
             setError('Ein unerwarteter Fehler ist beim Hinzufügen zur Familie aufgetreten.');
             console.error(err);
         }
-    }; 
+    };
 
     return (
-        <div className="family-dashboard p-2 ">
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <div className="bg-gray-100 p-2 mb-2 rounded flex items-center justify-between">
+        <div className="family-dashboard p-8 space-y-4">
+            {/* Leiste mit dem Familiencode und dem Chat-Icon */}
+            <div className="bg-gray-100 p-4 rounded-lg flex justify-between items-center shadow-md">
                 <div>
-                    <h2 className="text-xl font-semibold">Familie:</h2>
+                    <h2 className="text-2xl font-bold">Familie:</h2>
                     <p className="text-lg">{familyCode || 'Kein Familiencode zugeordnet'}</p>
                 </div>
                 <ChatIcon />
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-2 gap-2">
-                <MiniCalendar />
-                <WeatherWidget />
-                <TasksPreview />
-                <ShoppingListPreview />
-                <MiniMap />
-                <TicTacToe />
+
+            {/* Grid-Layout für die Widgets */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="mini-calendar widget-container">
+                    <MiniCalendar />
+                </div>
+                <div className="weather-widget widget-container">
+                    <WeatherWidget />
+                </div>
+                <div className="tasks-preview widget-container">
+                    <TasksPreview />
+                </div>
+                <div className="shopping-list-preview widget-container">
+                    <ShoppingListPreview />
+                </div>
+                <div className="mini-map widget-container md:col-span-2">
+                    <MiniMap />
+                </div>
             </div>
         </div>
     );

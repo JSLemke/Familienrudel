@@ -16,7 +16,8 @@ export async function login(formData) {
   }
 
   revalidatePath('/');
-  redirect('/account');
+  // Leite nach erfolgreichem Login zur Dashboard-Seite weiter
+  redirect('/dashboard');
 }
 
 export async function signup(formData) {
@@ -31,5 +32,20 @@ export async function signup(formData) {
   }
 
   revalidatePath('/');
-  redirect('/account');
+  // Leite nach erfolgreichem Signup zur Dashboard-Seite weiter
+  redirect('/dashboard');
+}
+
+// Beispiel für eine Logout-Funktion
+export async function logout() {
+  const supabase = createClient();
+  
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    redirect('/error');
+  }
+
+  // Leite nach erfolgreichem Logout zur Login-Seite weiter
+  redirect('/login/components/Login.js');
 }

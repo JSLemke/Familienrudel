@@ -1,4 +1,3 @@
-// DashboardPage.js
 'use client';
 
 import React, { useState } from 'react';
@@ -17,7 +16,6 @@ import Invite from '../components/Invite';
 import Tetris from '../games/Tetris/Tetris';
 import Memory from '../games/Memory/Memory';
 import TicTacToe from '../games/TicTacToe/TicTacToe';
-import createClientInstance from 'src/utils/supabase/client.js';
 
 export default function DashboardPage() {
     const [currentPage, setCurrentPage] = useState('home');
@@ -59,7 +57,6 @@ export default function DashboardPage() {
 
     return (
         <div className="flex h-screen overflow-hidden">
-            {/* Hamburger Menu Button */}
             <div className="md:hidden fixed top-4 left-4 z-50">
                 <button
                     onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -69,10 +66,8 @@ export default function DashboardPage() {
                 </button>
             </div>
 
-            {/* Sidebar Component */}
             <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} setCurrentPage={setCurrentPage} />
 
-            {/* Main Content Area */}
             <div className="flex-1 p-8 overflow-y-auto">
                 {renderContent()}
             </div>
