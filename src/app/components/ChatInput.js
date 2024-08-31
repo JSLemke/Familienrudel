@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import supabase from 'src/utils/supabase/client.js'; // Korrekte Importpfad für Supabase
 
 const ChatInput = ({ onSendMessage }) => {
   const [message, setMessage] = useState('');
@@ -32,7 +33,7 @@ const ChatInput = ({ onSendMessage }) => {
         onKeyDown={handleKeyDown} // Senden bei Enter
         className="p-2 w-full rounded bg-gray-700 border border-gray-600 text-white focus:outline-none"
       />
-      <button onClick={handleSend} className="mt-4 p-2 bg-blue-500 text-white rounded">
+      <button onClick={handleSend}  >
         Senden
       </button>
     </div>

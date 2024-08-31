@@ -99,15 +99,15 @@ export default function ChatPage({ receiverId }) {
   };
 
   return (
-    <div className="chat-container bg-gradient-to-tr from-gray-700 to-gray-900 text-white p-4 rounded-lg shadow-lg max-w-lg w-full mx-auto mt-6">
-      <div className="chat-box h-80 w-full bg-gray-800 rounded-lg overflow-y-scroll p-4">
+    <div className="chat-container bg-gradient-to-tr from-gray-300 to-gray-900 text-white p-4 rounded-lg shadow-lg max-w-lg w-full mx-auto mt-6">
+      <div className="chat-box h-180 w-full bg-gradient-to-tr from-gray-600 to-gray-800 rounded-lg overflow-y-scroll p-8">
         {messages.map((message) => (
           <div key={message.id} className="message mb-4 flex items-start">
             <div>
               <p className="text-sm font-semibold">
                 {message.sender_id === userId ? 'Du' : 'Andere Person'}
               </p>
-              <p className="bg-gray-700 p-2 rounded-lg text-sm">{message.content}</p>
+              <p className="bg-gradient-to-tr from-gray-500 to-gray-600 p-4 rounded-lg text-sm">{message.content}</p>
             </div>
           </div>
         ))}
@@ -118,7 +118,7 @@ export default function ChatPage({ receiverId }) {
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="p-2 w-full rounded bg-gray-700 border border-gray-600 text-white focus:outline-none"
+          className="p-5 w-full rounded bg-gradient-to-tr from-gray-500 to-gray-600 border border-gray-600 text-white focus:outline-none"
           placeholder="Nachricht eingeben"
         />
         <button
@@ -134,7 +134,7 @@ export default function ChatPage({ receiverId }) {
         )}
         <button
           onClick={handleSendMessage}
-          className="mt-4 p-4 w-full bg-gradient-to-tr from-gray-500 to-gray-600 rounded text-white hover:bg-gray-600"
+          className="mt-4 p-4 w-full bg-gradient-to-tr from-gray-200 to-gray-600 rounded text-white hover:bg-gray-600"
         >
           Senden
         </button>

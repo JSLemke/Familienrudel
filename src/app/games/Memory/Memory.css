@@ -1,0 +1,72 @@
+.memory {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .memory h1 {
+      font-size: 2em;
+      margin-bottom: 20px;
+      font-weight: bold;
+      background: linear-gradient(90deg, #d3d3d3, #696969); /* Hellgrau zu Dunkelgrau */
+      -webkit-background-clip: text;
+      background-clip: text; /* Add the standard property */
+      -webkit-text-fill-color: transparent;
+    }
+  
+  .memory button {
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    background: linear-gradient(90deg, #d3d3d3, #696969); /* Hellgrau zu Dunkelgrau */
+    color: white;
+  }
+  
+  .memory-game {
+    width: 640px;
+    height: 640px;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    perspective: 1000px;
+  }
+  
+  .memory-card {
+    width: calc(25% - 10px);
+    height: calc(25% - 10px);
+    margin: 5px;
+    position: relative;
+    transform: scale(1);
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+  }
+  
+  .memory-card:active {
+    transform: scale(0.97);
+    transition: transform 0.2s;
+  }
+  
+  .memory-card.flip {
+    transform: rotateY(180deg);
+  }
+  
+  .front-face,
+  .back-face {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    border-radius: 5px;
+    backface-visibility: hidden;
+  }
+  
+  .front-face {
+    transform: rotateY(180deg);
+  }
+  
+  .back-face {
+    background: #2e3d49;
+  }
+  

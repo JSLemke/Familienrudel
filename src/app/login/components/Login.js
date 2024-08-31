@@ -113,7 +113,7 @@ export default function Login() {
           />
           <button
             type="submit"
-            className="w-full p-3 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="w-full p-3 bg-gradient-to-r from-gray-500 to-gray-800 text-white rounded hover:bg-gray600"
           >
             Login
           </button>

@@ -43,7 +43,7 @@ export default function Profile() {
     <div className="profile p-8">
       <h1 className="text-3xl mb-4">Profil</h1>
       <div className="space-y-4">
-        <img src={photoURL} alt="Profilbild" className="w-24 h-24 rounded-full object-cover" />
+        <img src={photoURL} alt="Profilbild" className="w-24 h-24 rounded-full object-cover content-center" />
         <div>
           <p className="text-xl font-semibold">{nickname}</p>
           <p>{email}</p>

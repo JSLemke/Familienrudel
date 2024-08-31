@@ -10,6 +10,7 @@ import TicTacToe from '../games/TicTacToe/TicTacToe';
 import ChatIcon from './ChatIcon';
 import createClient from 'src/utils/supabase/client.js';
 import ChatPreview from './ChatPreview';
+import { ChatBubbleBottomCenterIcon } from '@heroicons/react/24/outline';
 export default function FamilyDashboard() {
     const [familyCode, setFamilyCode] = useState('');
     const [userId, setUserId] = useState('');
@@ -107,7 +108,7 @@ export default function FamilyDashboard() {
                     <h2 className="text-2xl font-bold">Familie:</h2>
                     <p className="text-lg">{familyCode || 'Kein Familiencode zugeordnet'}</p>
                 </div>
-                <ChatIcon />
+               <ChatIcon />
             </div>
 
             {/* Grid-Layout für die Widgets */}

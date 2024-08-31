@@ -7,24 +7,30 @@ function Tetris() {
   const canvasRef = useRef(null);
   const upcomingRef = useRef(null);
   const [isPaused, setIsPaused] = useState(false);
-  let ctx, uctx;
+  const [isRunning, setIsRunning] = useState(false);
+  const ctx = useRef(null);
+  const uctx = useRef(null);
+  let animationFrameId = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const ucanvas = upcomingRef.current;
-    
-    // Überprüfen, ob die Referenzen existieren
+
     if (canvas && ucanvas) {
-      ctx = canvas.getContext('2d');
-      uctx = ucanvas.getContext('2d');
-      run();
+      ctx.current = canvas.getContext('2d');
+      uctx.current = ucanvas.getContext('2d');
+      if (ctx.current && uctx.current) {
+        run();
+      } else {
+        console.error('Canvas context could not be initialized.');
+      }
     }
 
-    // Event Listener für das Resizing hinzufügen
     window.addEventListener('resize', resize, false);
 
     return () => {
       window.removeEventListener('resize', resize);
+      cancelAnimationFrame(animationFrameId.current);
     };
   }, []);
 
@@ -43,7 +49,6 @@ function Tetris() {
   const ny = 20;
   const nu = 5;
 
-  // Spielgeschwindigkeit
   const speed = {
     start: 90.0,
     decrement: 0.001,
@@ -78,7 +83,7 @@ function Tetris() {
   }
 
   function eachblock(type, x, y, dir, fn) {
-    let bit, result, row = 0,
+    let bit, row = 0,
       col = 0,
       blocks = type.blocks[dir];
     for (bit = 0x8000; bit > 0; bit = bit >> 1) {
@@ -94,7 +99,7 @@ function Tetris() {
 
   function occupied(type, x, y, dir) {
     let result = false;
-    eachblock(type, x, y, dir, function(x, y) {
+    eachblock(type, x, y, dir, function (x, y) {
       if (x < 0 || x >= nx || y < 0 || y >= ny || getBlock(x, y)) result = true;
     });
     return result;
@@ -163,14 +168,18 @@ function Tetris() {
   function play() {
     hide('start');
     setIsPaused(false);
+    setIsRunning(true);
     reset();
     playing = true;
+    frame(); // Startet die Spielschleife, wenn das Spiel beginnt
   }
 
   function lose() {
     show('start');
     setVisualScore();
     playing = false;
+    setIsRunning(false); // Spiel läuft nicht mehr nach dem Verlust
+    cancelAnimationFrame(animationFrameId.current); // Beendet die Animationsschleife
   }
 
   function setVisualScore(n) {
@@ -322,7 +331,7 @@ function Tetris() {
   }
 
   function dropPiece() {
-    eachblock(current.type, current.x, current.y, current.dir, function(x, y) {
+    eachblock(current.type, current.x, current.y, current.dir, function (x, y) {
       setBlock(x, y, current.type);
     });
   }
@@ -372,42 +381,45 @@ function Tetris() {
   }
 
   function draw() {
-    ctx.save();
-    ctx.lineWidth = 1;
-    ctx.translate(0.5, 0.5); // für scharfe 1px schwarze Linien
+    if (!ctx.current) return; // Verhindere den Fehler bei nicht initialisiertem Canvas-Kontext
+    ctx.current.save();
+    ctx.current.lineWidth = 1;
+    ctx.current.translate(0.5, 0.5); // für scharfe 1px schwarze Linien
     drawCourt();
     drawNext();
     drawScore();
     drawRows();
-    ctx.restore();
+    ctx.current.restore();
   }
 
   function drawCourt() {
+    if (!ctx.current) return; // Verhindere Fehler bei nicht initialisiertem Canvas-Kontext
     if (invalid.court) {
-      ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-      if (playing) drawPiece(ctx, current.type, current.x, current.y, current.dir);
+      ctx.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+      if (playing) drawPiece(ctx.current, current.type, current.x, current.y, current.dir);
       let x, y, block;
       for (y = 0; y < ny; y++) {
         for (x = 0; x < nx; x++) {
           block = getBlock(x, y);
-          if (block) drawBlock(ctx, x, y, block.color);
+          if (block) drawBlock(ctx.current, x, y, block.color);
         }
       }
-      ctx.strokeRect(0, 0, nx * dx - 1, ny * dy - 1); // Spielfeldbegrenzung
+      ctx.current.strokeRect(0, 0, nx * dx - 1, ny * dy - 1); // Spielfeldbegrenzung
       invalid.court = false;
     }
   }
 
   function drawNext() {
+    if (!uctx.current) return; // Verhindere Fehler bei nicht initialisiertem Canvas-Kontext
     if (invalid.next) {
       const padding = (nu - next.type.size) / 2; // Einfacher Versuch, die Anzeige des nächsten Stücks zu zentrieren
-      uctx.save();
-      uctx.translate(0.5, 0.5);
-      uctx.clearRect(0, 0, nu * dx, nu * dy);
-      drawPiece(uctx, next.type, padding, padding, next.dir);
-      uctx.strokeStyle = 'black';
-      uctx.strokeRect(0, 0, nu * dx - 1, nu * dy - 1);
-      uctx.restore();
+      uctx.current.save();
+      uctx.current.translate(0.5, 0.5);
+      uctx.current.clearRect(0, 0, nu * dx, nu * dy);
+      drawPiece(uctx.current, next.type, padding, padding, next.dir);
+      uctx.current.strokeStyle = 'black';
+      uctx.current.strokeRect(0, 0, nu * dx - 1, nu * dy - 1);
+      uctx.current.restore();
       invalid.next = false;
     }
   }
@@ -427,7 +439,7 @@ function Tetris() {
   }
 
   function drawPiece(ctx, type, x, y, dir) {
-    eachblock(type, x, y, dir, function(x, y) {
+    eachblock(type, x, y, dir, function (x, y) {
       drawBlock(ctx, x, y, type.color);
     });
   }
@@ -439,19 +451,24 @@ function Tetris() {
   }
 
   function frame() {
-    const now = timestamp();
-    update(Math.min(1, (now - dt) / 1000.0)); // requestAnimationFrame muss große Deltas verarbeiten können, die auftreten, wenn es im Hintergrund oder in einem nicht sichtbaren Tab "hiberniert"
-    draw();
     if (!isPaused) {
-      requestAnimationFrame(frame);
+      const now = timestamp();
+      update(Math.min(1, (now - dt) / 1000.0)); // requestAnimationFrame muss große Deltas verarbeiten können, die auftreten, wenn es im Hintergrund oder in einem nicht sichtbaren Tab "hiberniert"
+      draw();
+      animationFrameId.current = requestAnimationFrame(frame);
     }
   }
 
   function togglePause() {
-    setIsPaused(!isPaused);
-    if (!isPaused) {
-      frame(); // Spielschleife fortsetzen
-    }
+    setIsPaused((prev) => {
+      const newPausedState = !prev;
+      if (newPausedState) {
+        cancelAnimationFrame(animationFrameId.current); // Stoppt die Animationsschleife
+      } else {
+        frame(); // Spielschleife fortsetzen
+      }
+      return newPausedState;
+    });
   }
 
   return (
