@@ -65,8 +65,14 @@ export default function Login() {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen p-4">
+      {/* Logo */}
+      <img 
+  src="/Familienrudel.png" 
+  alt="Logo" 
+  className="mb-8 w-32 h-32" 
+/> 
       <div className="p-8 max-w-md w-full">
-        <h1 className="text-4xl mb-6 text-center">Login</h1>
+        <h1 className="text-4xl mb-6 text-center caret-violet-50 text-white">Login</h1>
         <form onSubmit={handleLogin} className="space-y-4">
           <input
             type="email"
@@ -114,11 +120,11 @@ export default function Login() {
           {error && <p className="text-red-500 text-center">{error}</p>}
         </form>
         <div className="flex justify-between mt-4">
-          <button onClick={handleNavigateToRegister} className="text-blue-500 hover:underline">
+          <button onClick={handleNavigateToRegister} className="text-white hover:underline">
             Noch keinen Account? Jetzt registrieren
           </button>
         </div>
       </div>
     </div>
   );
-}
+}  

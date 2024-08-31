@@ -64,7 +64,6 @@ export default function ChatPage({ receiverId }) {
 
   const handleSendMessage = async () => {
     if (newMessage.trim() === '') {
-      // Leere Nachrichten werden nicht gesendet
       return;
     }
 
@@ -73,7 +72,7 @@ export default function ChatPage({ receiverId }) {
         .from('messages')
         .insert([{
           sender_id: userId,
-          receiver_id: receiverId || userId,  // Verwende userId als Fallback für receiverId
+          receiver_id: receiverId || userId,
           content: newMessage.trim(),
           sent_at: new Date(),
         }]);
@@ -81,7 +80,7 @@ export default function ChatPage({ receiverId }) {
       if (error) {
         console.error('Fehler beim Senden der Nachricht:', error.message);
       } else {
-        setNewMessage(''); // Textfeld nach dem Senden leeren
+        setNewMessage('');
         setShowEmojiPicker(false);
       }
     }
@@ -118,7 +117,7 @@ export default function ChatPage({ receiverId }) {
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          onKeyDown={handleKeyDown} // Enter-Taste zum Senden
+          onKeyDown={handleKeyDown}
           className="p-2 w-full rounded bg-gray-700 border border-gray-600 text-white focus:outline-none"
           placeholder="Nachricht eingeben"
         />

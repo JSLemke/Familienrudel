@@ -47,5 +47,5 @@ export async function logout() {
   }
 
   // Leite nach erfolgreichem Logout zur Login-Seite weiter
-  redirect('/login/components/Login.js');
+  redirect('/Login.js');
 }

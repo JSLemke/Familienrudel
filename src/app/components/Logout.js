@@ -1,6 +1,6 @@
 'use client';
 
-import supabase from 'src/utils/supabase/client.js'; // Korrekte Importpfad für Supabase
+import supabase from 'src/utils/supabase/client.js';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
@@ -29,7 +29,6 @@ function Logout() {
       >
         Confirm Logout
       </button>
-      redirect('/Login');
     </div>
   );
 }
