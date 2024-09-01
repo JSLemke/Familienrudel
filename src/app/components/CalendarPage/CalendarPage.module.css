@@ -1,32 +1,95 @@
 .custom-calendar {
-    background-color: white; /* Hintergrundfarbe des Kalenders */
-    color: black; /* Textfarbe */
-  }
-  
-  .custom-calendar .rbc-event {
-    background-color: #d3d3d3; /* Farbe für Ereignisse */
-    color: black; /* Textfarbe in den Ereignissen */
-  }
-  
-  .custom-calendar .rbc-toolbar {
-    background-color: white; /* Toolbar-Hintergrundfarbe */
-    color: black; /* Toolbar-Textfarbe */
-  }
-  
-  .custom-calendar .rbc-month-view, 
-  .custom-calendar .rbc-time-view,
-  .custom-calendar .rbc-agenda-view {
-    background-color: white; /* Ansichten-Hintergrundfarbe */
-    color: black; /* Ansichten-Textfarbe */
-  }
-  
-  .custom-calendar .rbc-day-bg {
-    background-color: white; /* Hintergrundfarbe der Tage */
-    color: black; /* Textfarbe der Tage */
-  }
-  
-  .custom-calendar .rbc-header {
-    background-color: white; /* Hintergrundfarbe der Überschriften (Tage, Wochen) */
-    color: black; /* Textfarbe der Überschriften */
-  }
-  
+  background: linear-gradient(90deg, rgb(38, 7, 178) 7%, rgb(66, 32, 168) 49%, rgb(5, 11, 89) 100%); /* Hintergrundfarbe des Kalenders */
+  color: #e2dede; /* Textfarbe */
+  padding: 40px;
+  margin: 0;
+  border: none;
+  font-family: 'Arial', sans-serif;
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(242, 238, 238, 0.4); /* Heller Schatten */
+  width: 100%;
+  max-width: 100%;
+}
+
+.custom-calendar .rbc-event {
+  background: linear-gradient(90deg, rgb(38, 7, 178) 7%, rgb(66, 32, 168) 49%, rgb(5, 11, 89) 100%); /* Farbe für Ereignisse */
+  color: #e2dede; /* Textfarbe in den Ereignissen */
+  border-radius: 8px;
+}
+
+.custom-calendar .rbc-toolbar {
+  background: linear-gradient(9deg, rgb(22, 16, 130) 0%, rgb(67, 67, 216) 45%); /* Toolbar-Hintergrundfarbe */
+  color: #e2dede; /* Toolbar-Textfarbe */
+  border-radius: 8px;
+}
+
+.custom-calendar .rbc-toolbar button {
+  background: none;
+  border: none;
+  color: #e2dede;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.custom-calendar .rbc-toolbar button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.custom-calendar .rbc-month-view, 
+.custom-calendar .rbc-time-view,
+.custom-calendar .rbc-agenda-view {
+  background: rgba(5, 11, 89, 0.1); /* Ansichten-Hintergrundfarbe */
+  color: #e2dede; /* Ansichten-Textfarbe */
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(242, 238, 238, 0.4); /* Heller Schatten */
+}
+
+.custom-calendar .rbc-day-bg {
+  background: #4338ca; /* Hintergrundfarbe der Tage */
+  color: #e2dede; /* Textfarbe der Tage */
+}
+
+.custom-calendar .rbc-header {
+  background: linear-gradient(90deg, rgb(38, 7, 178) 7%, rgb(66, 32, 168) 49%, rgb(5, 11, 89) 100%); /* Hintergrundfarbe der Überschriften (Tage, Wochen) */
+  color: #e2dede; /* Textfarbe der Überschriften */
+  border-radius: 8px;
+}
+
+.custom-calendar .rbc-today {
+  background-color: rgba(1, 1, 77, 0.3); /* Hintergrundfarbe für den heutigen Tag */
+}
+
+.custom-calendar .rbc-off-range-bg {
+  background-color: rgba(89, 5, 89, 0.3); /* Hintergrundfarbe für Tage außerhalb des aktuellen Monats */
+  color: white; /* Textfarbe */
+}
+
+.custom-calendar .rbc-off-range {
+  color: #e2dede; /* Textfarbe für Tage außerhalb des aktuellen Monats */
+}
+
+.custom-calendar .rbc-event-label {
+  color: #e2dede; /* Textfarbe für Ereignislabels */
+}
+
+.custom-calendar .rbc-time-content {
+  border-top: 2px solid #e2dede; /* Randfarbe für Zeitansicht */
+}
+
+.custom-calendar .rbc-time-gutter {
+  background: linear-gradient(90deg, rgb(38, 7, 178) 7%, rgb(66, 32, 168) 49%, rgb(5, 11, 89) 100%); /* Hintergrundfarbe für die Zeitleiste */
+  color: #e7e5e4; /* Textfarbe der Zeitleiste */
+}
+
+.custom-calendar .rbc-agenda-date-cell {
+  background-color: rgba(5, 11, 89, 0.3); /* Hintergrundfarbe für Agenda-Datenzellen */
+  color: #e2dede; /* Textfarbe für Agenda-Datenzellen */
+}
+
+.custom-calendar .rbc-agenda-time-cell {
+  background-color: rgba(38, 7, 178, 0.3); /* Hintergrundfarbe für Agenda-Zeitzellen */
+  color: #e2dede; /* Textfarbe für Agenda-Zeitzellen */
+}

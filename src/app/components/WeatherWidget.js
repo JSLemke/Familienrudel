@@ -54,16 +54,16 @@ export default function WeatherWidget() {
     };
 
     return (
-        <div className="p-12 bg-gradient-to-r from-blue-600 via-blue-500 to-gray-200 rounded-xl shadow-lg text-center max-w-sm mx-auto">
-            <h2 className="text-3xl font-extrabold mb-4 text-white">Wetter</h2>
+        <div className="p-12 bg-gradient-to-r from-blue-700 to-indigo-900 rounded-xl shadow-xl shadow-white/25 backdrop-blur-xl bg-opacity-40 backdrop-filter blur-(3px, 2, 3, 0.4) text-center max-w-xl transform transition-transform mx-center">
+            <h2 className="text-5xl font-extrabold mb-8 text-white">Wetter</h2>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {weather ? (
                 <div>
-                    <div className="text-7xl mb-2">{getWeatherIcon(weather.weathercode)}</div>
-                    <p className="text-5xl font-semibold text-white">{weather.temperature}°C</p>
+                    <div className="text-9xl mb-4">{getWeatherIcon(weather.weathercode)}</div>
+                    <p className="text-7xl font-semibold text-white">{weather.temperature}°C</p>
                 </div>
             ) : (
-                <p className="text-xl text-white">Lade Wetterdaten...</p>
+                <p className="text-3xl text-white">Lade Wetterdaten...</p>
             )}
         </div>
     );

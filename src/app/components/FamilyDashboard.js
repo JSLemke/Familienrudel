@@ -5,12 +5,11 @@ import MiniCalendar from './MiniCalendar';
 import WeatherWidget from './WeatherWidget';
 import TasksPreview from './TasksPreview';
 import ShoppingListPreview from './ShoppingListPreview';
-import MiniMap from './MiniMap';
-import TicTacToe from '../games/TicTacToe/TicTacToe';
-import ChatIcon from './ChatIcon';
+import dynamic from 'next/dynamic';
 import createClient from 'src/utils/supabase/client.js';
-import ChatPreview from './ChatPreview';
-import { ChatBubbleBottomCenterIcon } from '@heroicons/react/24/outline';
+
+const MiniMap = dynamic(() => import('./MiniMap'), { ssr: false });
+
 export default function FamilyDashboard() {
     const [familyCode, setFamilyCode] = useState('');
     const [userId, setUserId] = useState('');
@@ -75,8 +74,10 @@ export default function FamilyDashboard() {
 
             let members = family?.members;
 
-            if (!members) {
-                members = {};
+            // Stelle sicher, dass members ein Objekt ist
+            if (typeof members !== 'object' || members === null) {
+                console.error('Erwartetes Objekt, aber etwas anderes gefunden');
+                members = {};  // Setze es auf ein leeres Objekt
             }
 
             if (!members[userId]) {
@@ -101,32 +102,29 @@ export default function FamilyDashboard() {
     };
 
     return (
-        <div className="family-dashboard p-8 space-y-4">
-            {/* Leiste mit dem Familiencode und dem Chat-Icon */}
-            <div className="bg-gray-100 p-4 rounded-lg flex justify-between items-center shadow-md">
+        <div className="family-dashboard h-full">
+            {error && <p className="text-red-500">{error}</p>}
+            <div className="bg-gray-800 text-stone-100 p-2 mb-2 rounded flex items-center justify-between">
                 <div>
-                    <h2 className="text-2xl font-bold">Familie:</h2>
-                    <p className="text-lg">{familyCode || 'Kein Familiencode zugeordnet'}</p>
+                    <h2 className="text-xl font-semibold">Familie</h2>
+                    <div className="flex items-center space-x-2">
+                        <p className="text-lg">{familyCode || 'Kein Familiencode zugeordnet'}</p>
+                        <button
+                            onClick={() => navigator.clipboard.writeText(familyCode || '')}
+                            className="bg-gray-500 hover:bg-gray-400 active:bg-green-500 text-black px-2 py-1 rounded text-sm transition-colors"
+                        >
+                            Kopieren
+                        </button>
+                    </div>
                 </div>
-               <ChatIcon />
             </div>
-
-            {/* Grid-Layout für die Widgets */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="mini-calendar widget-container">
-                    <MiniCalendar />
-                </div>
-                <div className="weather-widget widget-container">
-                    <WeatherWidget />
-                </div>
-                <div className="tasks-preview widget-container">
-                    <TasksPreview />
-                </div>
-                <div className="shopping-list-preview widget-container">
-                    <ShoppingListPreview />
-                </div>
-                <div className="mini-map widget-container md:col-span-2">
-                    <MiniMap />
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-2 items-center">
+                <TasksPreview className="h-full" />
+                <ShoppingListPreview className="h-full" />
+                <div className="lg:col-span-2 grid md:grid-cols-1 lg:grid-cols-3 gap-2 items-center">
+                    <MiniCalendar className="h-full" />
+                    <WeatherWidget className="h-full" />
+                    <MiniMap className="h-full" />
                 </div>
             </div>
         </div>

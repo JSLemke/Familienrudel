@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
     const [userName, setUserName] = useState('');
+    const [profileImage, setProfileImage] = useState('');
     const router = useRouter();
 
     useEffect(() => {
@@ -17,7 +18,19 @@ export default function Navbar() {
             }
 
             if (user) {
-                setUserName(user.email);
+                const { data, error: profileError } = await supabase
+                    .from('users')
+                    .select('nickname, photo_url')
+                    .eq('id', user.id)
+                    .single();
+
+                if (profileError) {
+                    console.error('Error fetching profile data:', profileError.message);
+                    return;
+                }
+
+                setUserName(data.nickname); // Nickname setzen
+                setProfileImage(data.photo_url); // Profilbild-URL setzen
             } else {
                 console.log('No user is logged in');
             }
@@ -37,17 +50,20 @@ export default function Navbar() {
     };
 
     return (
-            <nav className="bg-white p-4 shadow-md flex justify-between items-center">
-                <div>
-                    <img src="./Familienrudel.png" className="w-10 h-10" alt="FamilienRudel Logo" loading="lazy" />
-                    <h1 className="text-black text-2xl font-bold"></h1>
-                </div>
-                
-                <div className="flex items-center space-x-4">
-                    <button onClick={handleLogout} className="bg-gradient-to-r from-black to-gray-200 text-white p-2 rounded">
-                        Logout
-                    </button>
-                </div>
-            </nav>
-        );
+        <nav className="p-4 shadow-md flex justify-between items-center">
+            <div></div>
+
+            <div className="flex items-center mr-4 space-x-4">
+                {userName && profileImage && (
+                    <div className="flex items-center space-x-2">
+                        <img src={profileImage} alt="Profile" className="w-8 h-8 rounded-full" />
+                        <span className="text-white font-medium">{userName}</span>
+                    </div>
+                )}
+                <button onClick={handleLogout} className="bg-[#e03131] text-white p-2 rounded">
+                    Logout
+                </button>
+            </div>
+        </nav>
+    );
 }

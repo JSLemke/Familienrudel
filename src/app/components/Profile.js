@@ -40,7 +40,7 @@ export default function Profile() {
   }, [supabase]);
 
   return (
-    <div className="profile p-8">
+    <div className="profile p-8 w-full">
       <h1 className="text-3xl mb-4">Profil</h1>
       <div className="space-y-4">
         <img src={photoURL} alt="Profilbild" className="w-24 h-24 rounded-full object-cover content-center" />

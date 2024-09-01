@@ -7,18 +7,12 @@ export default function Sidebar({ setCurrentPage, isOpen, setIsOpen }) {
         <>
             {/* Sidebar */}
             <div
-                className={`fixed top-0 left-0 h-full bg-gradient-to-r from-black to-gray-200 text-white transition-transform transform ${
-                    isOpen ? 'translate-x-0' : '-translate-x-full'
-                } md:translate-x-0 md:static md:flex md:flex-col md:w-64 z-50`}
+                className={`fixed top-0 left-0 h-full bg-gray-800 rounded-lg text-stone-100 transition-transform transform ${isOpen ? 'translate-x-0' : '-translate-x-full'
+                    } md:translate-x-0 md:static md:flex md:flex-col md:w-64 z-50`}
             >
-                <div className="p-4 flex justify-between items-center">
+                <div className="p-4 flex items-center">
                     <h2 className="text-2xl font-bold">Familienrudel</h2>
-                    <button
-                        className="md:hidden text-white bg-gradient-to-tr from-black to-gray-200 p-2 rounded-md"
-                        onClick={() => setIsOpen(false)}
-                    >
-                        ×
-                    </button>
+
                 </div>
                 <nav className="space-y-2">
                     <a
@@ -26,7 +20,7 @@ export default function Sidebar({ setCurrentPage, isOpen, setIsOpen }) {
                             setCurrentPage('home');
                             setIsOpen(false);
                         }}
-                        className="block px-4 py-2 rounded hover:bg-gray-600 cursor-pointer"
+                        className="block px-4 py-2 rounded hover:bg-gradient-to-r from-indigo-700 to-indigo-950 cursor-pointer"
                     >
                         Home (Familientafel)
                     </a>
@@ -35,7 +29,7 @@ export default function Sidebar({ setCurrentPage, isOpen, setIsOpen }) {
                             setCurrentPage('profile');
                             setIsOpen(false);
                         }}
-                        className="block px-4 py-2 rounded hover:bg-gray-600 cursor-pointer"
+                        className="block px-4 py-2 rounded hover:bg-gradient-to-r from-indigo-700 to-indigo-950 cursor-pointer"
                     >
                         Profil
                     </a>
@@ -44,7 +38,7 @@ export default function Sidebar({ setCurrentPage, isOpen, setIsOpen }) {
                             setCurrentPage('profileEdit');
                             setIsOpen(false);
                         }}
-                        className="block px-4 py-2 rounded hover:bg-gray-600 cursor-pointer"
+                        className="block px-4 py-2 rounded hover:bg-gradient-to-r from-indigo-700 to-indigo-950 cursor-pointer"
                     >
                         Profil Bearbeiten
                     </a>
@@ -53,7 +47,7 @@ export default function Sidebar({ setCurrentPage, isOpen, setIsOpen }) {
                             setCurrentPage('chat');
                             setIsOpen(false);
                         }}
-                        className="block px-4 py-2 rounded hover:bg-gray-600 cursor-pointer"
+                        className="block px-4 py-2 rounded hover:bg-gradient-to-r from-indigo-700 to-indigo-950 cursor-pointer"
                     >
                         Chat
                     </a>
@@ -62,7 +56,7 @@ export default function Sidebar({ setCurrentPage, isOpen, setIsOpen }) {
                             setCurrentPage('calendar');
                             setIsOpen(false);
                         }}
-                        className="block px-4 py-2 rounded hover:bg-gray-600 cursor-pointer"
+                        className="block px-4 py-2 rounded hover:bg-gradient-to-r from-indigo-700 to-indigo-950 cursor-pointer"
                     >
                         Kalender
                     </a>
@@ -71,7 +65,7 @@ export default function Sidebar({ setCurrentPage, isOpen, setIsOpen }) {
                             setCurrentPage('tasks');
                             setIsOpen(false);
                         }}
-                        className="block px-4 py-2 rounded hover:bg-gray-600 cursor-pointer"
+                        className="block px-4 py-2 rounded hover:bg-gradient-to-r from-indigo-700 to-indigo-950 cursor-pointer"
                     >
                         Tagesaufgaben
                     </a>
@@ -80,7 +74,7 @@ export default function Sidebar({ setCurrentPage, isOpen, setIsOpen }) {
                             setCurrentPage('shoppingList');
                             setIsOpen(false);
                         }}
-                        className="block px-4 py-2 rounded hover:bg-gray-600 cursor-pointer"
+                        className="block px-4 py-2 rounded hover:bg-gradient-to-r from-indigo-700 to-indigo-950 cursor-pointer"
                     >
                         Einkaufsliste
                     </a>
@@ -89,7 +83,7 @@ export default function Sidebar({ setCurrentPage, isOpen, setIsOpen }) {
                             setCurrentPage('gps');
                             setIsOpen(false);
                         }}
-                        className="block px-4 py-2 rounded hover:bg-gray-600 cursor-pointer"
+                        className="block px-4 py-2 rounded hover:bg-gradient-to-r from-indigo-700 to-indigo-950 cursor-pointer"
                     >
                         LiveMap
                     </a>
@@ -98,7 +92,7 @@ export default function Sidebar({ setCurrentPage, isOpen, setIsOpen }) {
                             setCurrentPage('settings');
                             setIsOpen(false);
                         }}
-                        className="block px-4 py-2 rounded hover:bg-gray-600 cursor-pointer"
+                        className="block px-4 py-2 rounded hover:bg-gradient-to-r from-indigo-700 to-indigo-950 cursor-pointer"
                     >
                         Dashboard Bearbeiten
                     </a>
@@ -107,7 +101,7 @@ export default function Sidebar({ setCurrentPage, isOpen, setIsOpen }) {
                             setCurrentPage('familyMembers');
                             setIsOpen(false);
                         }}
-                        className="block px-4 py-2 rounded hover:bg-gray-600 cursor-pointer"
+                        className="block px-4 py-2 rounded hover:bg-gradient-to-r from-indigo-700 to-indigo-950 cursor-pointer"
                     >
                         Familienmitglieder
                     </a>
@@ -116,7 +110,7 @@ export default function Sidebar({ setCurrentPage, isOpen, setIsOpen }) {
                             setCurrentPage('invite');
                             setIsOpen(false);
                         }}
-                        className="block px-4 py-2 rounded hover:bg-gray-600 cursor-pointer"
+                        className="block px-4 py-2 rounded hover:bg-gradient-to-r from-indigo-700 to-indigo-950 cursor-pointer"
                     >
                         Einladen
                     </a>
@@ -125,7 +119,7 @@ export default function Sidebar({ setCurrentPage, isOpen, setIsOpen }) {
                             setCurrentPage('tictactoe');
                             setIsOpen(false);
                         }}
-                        className="block px-4 py-2 rounded hover:bg-gray-600 cursor-pointer"
+                        className="block px-4 py-2 rounded hover:bg-gradient-to-r from-indigo-700 to-indigo-950 cursor-pointer"
                     >
                         TicTacToe
                     </a>
@@ -134,7 +128,7 @@ export default function Sidebar({ setCurrentPage, isOpen, setIsOpen }) {
                             setCurrentPage('memory');
                             setIsOpen(false);
                         }}
-                        className="block px-4 py-2 rounded hover:bg-gray-600 cursor-pointer"
+                        className="block px-4 py-2 rounded hover:bg-gradient-to-r from-indigo-700 to-indigo-950 cursor-pointer"
                     >
                         Memory
                     </a>
@@ -143,7 +137,7 @@ export default function Sidebar({ setCurrentPage, isOpen, setIsOpen }) {
                             setCurrentPage('tetris');
                             setIsOpen(false);
                         }}
-                        className="block px-4 py-2 rounded hover:bg-gray-600 cursor-pointer"
+                        className="block px-4 py-2 rounded hover:bg-gradient-to-r from-indigo-700 to-indigo-950 cursor-pointer"
                     >
                         Tetris
                     </a>

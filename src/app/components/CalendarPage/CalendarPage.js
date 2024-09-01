@@ -5,7 +5,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import createClientInstance from 'src/utils/supabase/client.js';
-import styles from './CalendarPage.module.css';
+import 'src/app/components/CustomCalendar.css'; // CSS-Datei des MiniKalenders
 
 const localizer = momentLocalizer(moment);
 
@@ -72,8 +72,7 @@ export default function CalendarPage() {
 
   const deleteEvent = async (eventId) => {
     try {
-      console.log(`Attempting to delete event with ID: ${eventId}`); // Debugging
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('events')
         .delete()
         .eq('id', eventId);
@@ -81,7 +80,6 @@ export default function CalendarPage() {
       if (error) {
         console.error('Error deleting event:', error.message);
       } else {
-        console.log('Event deleted:', data); // Output the deleted data
         fetchEvents(); 
       }
     } catch (error) {
@@ -95,25 +93,26 @@ export default function CalendarPage() {
 
   const handleSelectEvent = (event) => {
     if (window.confirm(`Do you want to delete the event '${event.title}'?`)) {
-      console.log('Event to delete:', event); // Debugging
       deleteEvent(event.id);
     }
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Calendar</h2>
-      <Calendar
-        localizer={localizer}
-        events={events}
-        startAccessor="start"
-        endAccessor="end"
-        selectable
-        onSelectSlot={handleSelectSlot}
-        onSelectEvent={handleSelectEvent}
-        style={{ height: 500 }}
-        className={styles['custom-calendar']}
-      />
+    <div className="p-4 bg-gradient-to-r from-indigo-700 to-indigo-950 rounded-lg shadow-lg text-center max-w-5xl mx-auto">
+      <h2 className="text-3xl font-bold mb-6 text-white">Kalender</h2>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <Calendar
+          localizer={localizer}
+          events={events}
+          startAccessor="start"
+          endAccessor="end"
+          selectable
+          onSelectSlot={handleSelectSlot}
+          onSelectEvent={handleSelectEvent}
+          style={{ height: 600, width: '100%' }} // Breite auf 100% gesetzt
+          className="custom-calendar"
+        />
+      </div>
     </div>
   );
 }

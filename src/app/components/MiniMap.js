@@ -8,16 +8,16 @@ export default function MiniMap() {
 
   useEffect(() => {
     const loadLeaflet = async () => {
-      // Dynamic import of Leaflet to avoid SSR issues
+      // Dynamisches Laden von Leaflet, um SSR-Probleme zu vermeiden
       const L = (await import('leaflet')).default;
       await import('leaflet/dist/leaflet.css');
 
-      // Custom marker icon
+      // Anpassung des Markers
       const customIcon = L.icon({
-        iconUrl: '/path/to/custom-marker-icon.png', // Replace with the path to your custom icon
-        iconSize: [38, 38], // size of the icon
-        iconAnchor: [22, 38], // point of the icon which will correspond to marker's location
-        popupAnchor: [-3, -38] // point from which the popup should open relative to the iconAnchor
+        iconUrl: '/path/to/custom-marker-icon.png', // Ersetze durch den Pfad zu deinem benutzerdefinierten Icon
+        iconSize: [38, 38], // Größe des Icons
+        iconAnchor: [22, 38], // Punkt des Icons, der der Position des Markers entspricht
+        popupAnchor: [-3, -38] // Punkt, von dem aus das Popup relativ zum iconAnchor geöffnet werden soll
       });
 
       if (mapRef.current === null) {
@@ -51,15 +51,25 @@ export default function MiniMap() {
     };
 
     if (typeof window !== 'undefined') {
-      loadLeaflet();  // Load Leaflet only in the browser
+      loadLeaflet();  // Leaflet nur im Browser laden
     }
   }, []);
 
   return (
-    <div className="p-4 bg-gradient-to-r from-cfcfcf to-e5e5e5 rounded-lg shadow-md">
-    {locationError && <p className="text-red-500 text-center">{locationError}</p>}
-    <div id="minimap" style={{ height: '500px', width: '100%', borderRadius: '8px', overflow: 'hidden' }} />
-  </div>
-  
+    <div className="p-4 bg-gradient-to-r from-cfcfcf to-e5e5e5 rounded-lg shadow-md max-w-xl mx-left ">
+      {locationError && <p className="text-red-500 text-center">{locationError}</p>}
+      <div
+        id="minimap"
+        style={{
+          height: '400px',
+          width: '100%',
+          borderRadius: '8px',
+          overflow: 'hidden',
+          zIndex: 1, // Z-index niedriger als die Sidebar setzen
+          position: 'right',
+          boxShadow: '0 8px 16px rgba(242, 238, 238, 0.4)', // Korrigiertes boxShadow
+        }}
+      />
+    </div>
   );
 }

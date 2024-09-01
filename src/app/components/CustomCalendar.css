@@ -1,53 +1,59 @@
 .custom-calendar {
+    padding: 40px;
+    margin: 0; /* Entfernt zusätzliches Margin */
     border: none;
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(145deg, #cfcfcf, #e5e5e5); /* Silbergrauer Verlauf */
-    border-radius: 12px;
-    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2); /* Heller Schatten */
+    color: #e2dede;
+    background: linear-gradient(90deg, rgb(38, 7, 178) 7%, rgb(66, 32, 168) 49%, rgb(5, 11, 89) 100%); /* Silbergrauer Verlauf */
+    border-radius: 20px;
+    box-shadow: 0 8px 16px rgba(242, 238, 238, 0.4); /* Heller Schatten */
+    width: 100%; /* Sorgt dafür, dass der Kalender die volle Breite innerhalb der Box einnimmt */
+    max-width: 100%; /* Entfernt mögliche Beschränkungen der maximalen Breite */
 }
 
 .custom-calendar .react-calendar__navigation button {
-    color: #333;
-    background-color: #cfcfcf;
+    color: #e7e5e4;
+    background: linear-gradient(9deg, rgb(22, 16, 130) 0%, rgb(67, 67, 216) 45%);
     border-radius: 8px;
-    margin: 2px;
+    margin: 3px;
     font-weight: bold;
     font-size: 1.1em;
     transition: background-color 0.3s ease;
 }
 
 .custom-calendar .react-calendar__navigation button:hover {
-    background-color: #b0b0b0;
+    background-color: #15123b;
 }
 
 .custom-calendar .react-calendar__tile {
-    border-radius: 10px;
-    background: #e5e5e5;
+    border-radius: 20px;
+    background: #a2b2e800;
     padding: 10px;
-    color: #333;
+    color: white;
     font-weight: bold;
     transition: background-color 0.3s ease;
 }
 
 .custom-calendar .react-calendar__tile--now {
-    background: #ff9800;
+    background: #069ced78;
     color: white;
     border-radius: 10px;
 }
 
 .custom-calendar .react-calendar__tile--active {
-    background: #2196f3;
-    color: white;
+    background: #011a6a;
+    box-shadow: #e2dede 0px 0px 0px 2px;
+    color: #e7e5e4;
     border-radius: 10px;
 }
 
 .custom-calendar .react-calendar__tile--active:hover,
 .custom-calendar .react-calendar__tile--active:focus {
-    background: #1e88e5;
+    background: #05378384;
 }
 
 .custom-calendar .react-calendar__tile--weekend {
-    background-color: #f0f0f0;
+    background-color: #600505;
 }
 
 .custom-calendar .react-calendar__month-view__days__day--sunday,
@@ -56,9 +62,10 @@
 }
 
 .custom-calendar .react-calendar__month-view__days__day--saturday {
-    color: gray;
+    color: white;
 }
 
 .custom-calendar abbr[title] {
     text-decoration: none;
+    color: white;
 }

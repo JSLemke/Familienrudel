@@ -84,7 +84,7 @@ export default function ShoppingListPage() {
                     className="p-2 border rounded w-full"
                     placeholder="Neuer Artikel"
                 />
-                <button onClick={addItem} className="bg-gray-500 text-white p-2 rounded mt-2">
+                <button onClick={addItem} className="bg-gradient-to-tr from-indigo-700 to-indigo-950 text-white p-2 rounded mt-2">
                     Artikel hinzufügen
                 </button>
             </div>

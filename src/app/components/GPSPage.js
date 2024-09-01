@@ -17,9 +17,9 @@ export default function GPSPage() {
 
       const L = require('leaflet');
 
-      // Hier die Icon-Konfiguration einfügen;
+      // Hier die Icon-Konfiguration einfügen
       const DefaultIcon = L.icon({
-          iconUrl: 'public/geolocation icon.webp',  // Pfad zur Icon-Datei
+          iconUrl: '/geolocation icon.webp',  // Pfad zur Icon-Datei
           iconSize: [25, 41], // Größe des Icons
           iconAnchor: [12, 41], // Punkt des Icons, der mit der Location koordiniert
           popupAnchor: [1, -34], // Punkt, von dem aus das Popup erscheinen soll, relativ zum IconAnchor
@@ -76,5 +76,17 @@ export default function GPSPage() {
     }
   }, []);
 
-  return <div id="gpsmap" style={{ height: '400px', width: '100%' }} />;
+  return (
+    <div
+      id="gpsmap"
+      style={{
+        height: '700px',
+        width: '100%',
+        position: 'relative', // Sicherstellen, dass der z-index korrekt angewendet wird
+        zIndex: 1, // Setzt den z-index niedriger als die Sidebar
+        borderRadius: '8px', // Optional: Styling für abgerundete Ecken
+        overflow: 'hidden', // Optional: Sicherstellen, dass nichts überläuft
+      }}
+    />
+  );
 }

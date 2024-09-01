@@ -79,7 +79,7 @@ export default function TasksPage() {
                     className="p-2 border rounded w-full"
                     placeholder="New Task"
                 />
-                <button onClick={addTask} className="bg-gray-500 text-white p-2 rounded mt-2">
+                <button onClick={addTask} className="bg-gradient-to-tr from-indigo-700 to-indigo-950 text-white p-2 rounded mt-2">
                     Add Task
                 </button>
             </div>
