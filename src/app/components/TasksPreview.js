@@ -25,7 +25,7 @@ export default function TasksPreview() {
     }, []);
 
     return (
-        <div className="p-4 bg-gradient-to-r from-black to-white rounded-lg shadow-md">
+        <div className="p-4 bg-gradient-to-r from-orange-600 to-blue-600 rounded-lg shadow-md">
             <h2 className="text-xl font-bold mb-2 black text-zinc-100">Tagesaufgaben</h2>
             <ul>
                 {tasks.slice(0, 3).map((task, index) => (

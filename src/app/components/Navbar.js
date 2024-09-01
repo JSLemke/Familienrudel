@@ -37,17 +37,16 @@ export default function Navbar() {
     };
 
     return (
-            <nav className="bg-white p-4 shadow-md flex justify-between items-center">
-                <div>
-                    <img src="./Familienrudel.png" className="w-10 h-10" alt="FamilienRudel Logo" loading="lazy" />
-                    <h1 className="text-black text-2xl font-bold"></h1>
-                </div>
-                
-                <div className="flex items-center space-x-4">
-                    <button onClick={handleLogout} className="bg-gradient-to-r from-black to-gray-200 text-white p-2 rounded">
-                        Logout
-                    </button>
-                </div>
-            </nav>
-        );
+        <nav className="p-4 shadow-md flex justify-between items-center">
+            <div>
+
+            </div>
+
+            <div className="flex items-center mr-4 space-x-4">
+                <button onClick={handleLogout} className="bg-[#e03131] text-white p-2 rounded">
+                    Logout
+                </button>
+            </div>
+        </nav>
+    );
 }

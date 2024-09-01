@@ -75,7 +75,6 @@ export default function Register() {
     return (
         <div className="flex flex-col items-center justify-center h-screen p-4">
             <div className="p-8 max-w-md w-full">
-                <h1 className="text-4xl mb-6 text-center">Registrieren</h1>
                 <form onSubmit={handleRegister} className="space-y-4">
                     <input
                         type="email"

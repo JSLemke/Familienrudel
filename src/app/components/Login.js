@@ -14,7 +14,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const supabase = createClientInstance();
-  
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -66,7 +66,6 @@ export default function Login() {
   return (
     <div className="flex flex-col items-center justify-center h-screen p-4">
       <div className="p-8 max-w-md w-full">
-        <h1 className="text-4xl mb-6 text-center">Login</h1>
         <form onSubmit={handleLogin} className="space-y-4">
           <input
             type="email"
@@ -107,14 +106,14 @@ export default function Login() {
           />
           <button
             type="submit"
-            className="w-full p-3 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="w-full p-3 bg-blue-600 text-white rounded hover:bg-blue-800"
           >
             Login
           </button>
           {error && <p className="text-red-500 text-center">{error}</p>}
         </form>
         <div className="flex justify-between mt-4">
-          <button onClick={handleNavigateToRegister} className="text-blue-500 hover:underline">
+          <button onClick={handleNavigateToRegister} className="text-blue-600 hover:underline">
             Noch keinen Account? Jetzt registrieren
           </button>
         </div>

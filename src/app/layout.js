@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
                     {/* Entferne die Sidebar hier */}
                     <div className="flex-1 flex flex-col">
                         <Navbar />
-                        <main className="flex-1 p-8 overflow-y-auto">
+                        <main className="flex-1">
                             {children}
                         </main>
                     </div>

@@ -57,9 +57,9 @@ export default function MiniMap() {
 
   return (
     <div className="p-4 bg-gradient-to-r from-cfcfcf to-e5e5e5 rounded-lg shadow-md">
-    {locationError && <p className="text-red-500 text-center">{locationError}</p>}
-    <div id="minimap" style={{ height: '500px', width: '100%', borderRadius: '8px', overflow: 'hidden' }} />
-  </div>
-  
+      {locationError && <p className="text-red-500 text-center">{locationError}</p>}
+      <div id="minimap" style={{ height: '500px', width: '100%', borderRadius: '8px', overflow: 'hidden' }} />
+    </div>
+
   );
 }

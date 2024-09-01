@@ -58,12 +58,12 @@ export default function DashboardPage() {
     };
 
     return (
-        <div className="flex h-screen overflow-hidden">
+        <div className="flex overflow-hidden">
             {/* Hamburger Menu Button */}
-            <div className="md:hidden fixed top-4 left-4 z-50">
+            <div className="md:hidden fixed top-3 left-3 z-50">
                 <button
                     onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                    className="text-white bg-gradient-to-tr from-black to-gray-200 p-3 rounded-md"
+                    className="text-white bg-blue-600 p-3 rounded-md"
                 >
                     ☰
                 </button>
@@ -73,7 +73,7 @@ export default function DashboardPage() {
             <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} setCurrentPage={setCurrentPage} />
 
             {/* Main Content Area */}
-            <div className="flex-1 p-8 overflow-y-auto">
+            <div className="flex-1 pl-3 overflow-y-auto">
                 {renderContent()}
             </div>
         </div>
